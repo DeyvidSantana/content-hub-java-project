@@ -3,6 +3,8 @@ package com.projectpitang.contenthub.models;
 import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -15,6 +17,7 @@ public class Program implements IObjectPersistent<Long> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Size(min = 150, max = 200)
     @Column(name = "prog_cl_title")
     private String title;
 
@@ -25,14 +28,17 @@ public class Program implements IObjectPersistent<Long> {
     @JoinColumn(name="cast_cl_id")
     private Cast cast;
 
+    @Size(min = 30, max = 50)
     @Column(name = "prog_cl_prodcountry")
     private String productionCountry;
 
-    @Column(name = "prog_cl_spokenlang")
-    private String spokenLanguage;
+    @Size(min = 2, max = 20)
+    @Column(name = "prog_cl_language")
+    private String language;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "prog_cl_releaseyear")
-    private String releaseYear;
+    private Date releaseYear;
 
     @Column(name = "prog_cl_runtime")
     private int runtime;

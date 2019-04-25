@@ -1,12 +1,12 @@
-package com.example.mapone.utils;
+package com.projectpitang.contenthub.utils;
 
-public enum PersonGenre {
+public enum PersonGender {
     O(0,"Other"), M(1, "Male"), F(2, "Female");
 
     private int id;
     private String description;
 
-    PersonGenre(int id, String description) {
+    PersonGender(int id, String description) {
         this.id = id;
         this.description = description;
     }

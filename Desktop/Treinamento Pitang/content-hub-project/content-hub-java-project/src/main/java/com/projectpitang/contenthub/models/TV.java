@@ -6,11 +6,11 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "tb_serie")
+@Table(name = "tb_tv")
 @PrimaryKeyJoinColumn(name = "prog_cl_id")
-public class Series extends Program{
+public class TV extends Program{
 
-    @Column(name = "ser_cl_seansons")
+    @Column(name = "tv_cl_seansons")
     private int seansons;
 
 }
