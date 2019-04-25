@@ -3,6 +3,7 @@ package com.projectpitang.contenthub.models;
 import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_program")
@@ -36,8 +37,8 @@ public class Program implements IObjectPersistent<Long> {
     @Column(name = "prog_cl_runtime")
     private int runtime;
 
-    @Column(name = "prog_cl_genres")
-    private String programGenres;
+    @OneToMany(cascade = CascadeType.ALL, targetEntity = ProgramGenre.class, mappedBy = "genre")
+    private Set<ProgramGenre> programGenres;
 
 
 }
