@@ -20,8 +20,9 @@ public class Program implements IObjectPersistent<Long> {
     @Column(name = "prog_cl_overview")
     private String overview;
 
-    @Column(name = "prog_cl_casting")
-    private String casting;
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Cast.class)
+    @JoinColumn(name="cast_cl_id")
+    private Cast cast;
 
     @Column(name = "prog_cl_prodcountry")
     private String productionCountry;
@@ -37,5 +38,6 @@ public class Program implements IObjectPersistent<Long> {
 
     @Column(name = "prog_cl_genres")
     private String programGenres;
+
 
 }

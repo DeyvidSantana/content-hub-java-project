@@ -5,6 +5,7 @@ import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "tb_person")
@@ -32,6 +33,9 @@ public class Person implements IObjectPersistent<Long> {
 
     @Column(name = "per_cl_genre")
     private PersonGenre genre;
+
+    @ManyToMany(mappedBy = "cast")
+    private Set<Cast> cast;
 
     @Column(name = "per_cl_type", insertable=false, updatable=false)
     private String type;
