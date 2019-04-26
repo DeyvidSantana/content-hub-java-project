@@ -1,7 +1,7 @@
 package com.projectpitang.contenthub.utils;
 
 public enum PersonGender {
-    O(0,"Other"), M(1, "Male"), F(2, "Female");
+    O(0,"Other"), F(1, "Female"), M(2, "Male");
 
     private int id;
     private String description;

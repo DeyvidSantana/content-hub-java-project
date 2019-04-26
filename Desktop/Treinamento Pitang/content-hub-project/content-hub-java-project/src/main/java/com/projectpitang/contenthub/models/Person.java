@@ -1,5 +1,6 @@
 package com.projectpitang.contenthub.models;
 
+import com.google.common.base.Objects;
 import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 import com.projectpitang.contenthub.utils.PersonGender;
 
@@ -19,18 +20,18 @@ public class Person implements IObjectPersistent<Long> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Size(min = 150, max = 200)
+    @Size(min = 1, max = 200)
     @Column(name = "per_cl_name")
     private String name;
 
     @Column(name = "per_cl_height")
     private Double height;
 
-    @Size(min = 100, max = 150)
+    @Size(min = 1, max = 100)
     @Column(name = "per_cl_citybirth")
     private String cityBirth;
 
-    @Size(min = 100, max = 150)
+    @Size(min = 1, max = 30)
     @Column(name = "per_cl_countrybirth")
     private String countryBirth;
 
@@ -43,4 +44,80 @@ public class Person implements IObjectPersistent<Long> {
     @Column(name = "per_cl_type", insertable=false, updatable=false)
     private String type;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person = (Person) o;
+        return Objects.equal(id, person.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Double getHeight() {
+        return height;
+    }
+
+    public void setHeight(Double height) {
+        this.height = height;
+    }
+
+    public String getCityBirth() {
+        return cityBirth;
+    }
+
+    public void setCityBirth(String cityBirth) {
+        this.cityBirth = cityBirth;
+    }
+
+    public String getCountryBirth() {
+        return countryBirth;
+    }
+
+    public void setCountryBirth(String countryBirth) {
+        this.countryBirth = countryBirth;
+    }
+
+    public PersonGender getGender() {
+        return gender;
+    }
+
+    public void setGender(PersonGender gender) {
+        this.gender = gender;
+    }
+
+    public Set<Cast> getCast() {
+        return cast;
+    }
+
+    public void setCast(Set<Cast> cast) {
+        this.cast = cast;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 }
