@@ -18,22 +18,22 @@ public class Program implements IObjectPersistent<Long> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Size(min = 150, max = 200)
+    @Size(min = 1, max = 200)
     @Column(name = "prog_cl_title")
     private String title;
 
     @Column(name = "prog_cl_overview")
     private String overview;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, targetEntity = Cast.class)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, targetEntity = Cast.class)
     @JoinColumn(name="cast_cl_id")
     private Cast cast;
 
-    @Size(min = 30, max = 50)
+    @Size(min = 1, max = 30)
     @Column(name = "prog_cl_prodcountry")
     private String productionCountry;
 
-    @Size(min = 2, max = 20)
+    @Size(min = 1, max = 20)
     @Column(name = "prog_cl_language")
     private String language;
 
