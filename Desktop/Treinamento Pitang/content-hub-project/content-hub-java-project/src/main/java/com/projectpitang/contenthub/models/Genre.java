@@ -20,8 +20,8 @@ public class Genre implements IObjectPersistent<Long> {
     @Column(name = "gen_cl_name")
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, targetEntity = ProgramGenre.class, mappedBy = "program")
-    private Set<ProgramGenre> programGenres;
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "genres")
+    private Set<Program> programs;
 
     @Override
     public boolean equals(Object o) {
@@ -52,11 +52,11 @@ public class Genre implements IObjectPersistent<Long> {
         this.name = name;
     }
 
-    public Set<ProgramGenre> getProgramGenres() {
-        return programGenres;
+    public Set<Program> getPrograms() {
+        return programs;
     }
 
-    public void setProgramGenres(Set<ProgramGenre> programGenres) {
-        this.programGenres = programGenres;
+    public void setPrograms(Set<Program> programs) {
+        this.programs = programs;
     }
 }

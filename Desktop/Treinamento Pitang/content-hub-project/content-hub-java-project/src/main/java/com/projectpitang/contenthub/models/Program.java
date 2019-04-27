@@ -44,8 +44,11 @@ public class Program implements IObjectPersistent<Long> {
     @Column(name = "prog_cl_runtime")
     private int runtime;
 
-    @OneToMany(cascade = CascadeType.ALL, targetEntity = ProgramGenre.class, mappedBy = "genre")
-    private Set<ProgramGenre> programGenres;
+    @ManyToMany(cascade = CascadeType.ALL, targetEntity = Genre.class)
+    @JoinTable(name = "tb_program_genre",
+            joinColumns = @JoinColumn(referencedColumnName = "prog_cl_id"),
+            inverseJoinColumns = {@JoinColumn(referencedColumnName = "gen_cl_id")})
+    private Set<Genre> genres;
 
     @Override
     public boolean equals(Object o) {
@@ -124,11 +127,11 @@ public class Program implements IObjectPersistent<Long> {
         this.runtime = runtime;
     }
 
-    public Set<ProgramGenre> getProgramGenres() {
-        return programGenres;
+    public Set<Genre> getGenres() {
+        return genres;
     }
 
-    public void setProgramGenres(Set<ProgramGenre> programGenres) {
-        this.programGenres = programGenres;
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
     }
 }
