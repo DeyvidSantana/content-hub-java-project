@@ -38,7 +38,7 @@ public class Person implements IObjectPersistent<Long> {
     @Column(name = "per_cl_genre")
     private PersonGender gender;
 
-    @ManyToMany(mappedBy = "cast")
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "cast")
     private Set<Cast> cast;
 
     @Column(name = "per_cl_type", insertable=false, updatable=false)

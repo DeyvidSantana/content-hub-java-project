@@ -19,7 +19,7 @@ public class Cast {
     @Column(name = "cast_cl_name")
     private String name;
 
-    @OneToOne(mappedBy="cast")
+    @OneToOne(cascade = CascadeType.ALL, mappedBy="cast")
     private Program program;
 
     @ManyToMany(cascade = CascadeType.ALL, targetEntity = Person.class)

@@ -11,7 +11,7 @@ public class ProgramGenre implements IObjectPersistent<ProgramGenrePK> {
     @EmbeddedId
     private ProgramGenrePK programGenrePK;
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     @MapsId("programId")
     private Program program;
 
