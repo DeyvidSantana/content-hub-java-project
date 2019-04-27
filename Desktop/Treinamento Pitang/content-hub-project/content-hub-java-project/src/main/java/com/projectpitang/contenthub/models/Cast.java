@@ -1,6 +1,7 @@
 package com.projectpitang.contenthub.models;
 
 import com.google.common.base.Objects;
+import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
@@ -8,7 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tb_cast")
-public class Cast {
+public class Cast implements IObjectPersistent<Long> {
 
     @Id
     @Column(name = "cast_cl_id")
