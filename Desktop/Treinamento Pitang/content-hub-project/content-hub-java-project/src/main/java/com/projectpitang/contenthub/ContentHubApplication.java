@@ -21,8 +21,8 @@ public class ContentHubApplication {
 			API_KEY + "&language=" + LANGUAGE;
 	private static final String URL_TVS = "https://api.themoviedb.org/3/discover/tv?api_key=" +
 			API_KEY + "&language=" + LANGUAGE;
-	private static final String URL_CREDITS = "https://api.themoviedb.org/3/credit/299537?api_key=" +
-			API_KEY;
+	//private static final String URL_CREDITS = "https://api.themoviedb.org/3/credit/299537?api_key=" +
+			//API_KEY;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ContentHubApplication.class, args);
