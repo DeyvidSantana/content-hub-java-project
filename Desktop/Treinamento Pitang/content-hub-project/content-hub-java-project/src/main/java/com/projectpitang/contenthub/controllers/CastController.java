@@ -1,9 +1,6 @@
 package com.projectpitang.contenthub.controllers;
 
-import com.projectpitang.contenthub.models.Artist;
 import com.projectpitang.contenthub.models.Cast;
-import com.projectpitang.contenthub.models.Director;
-import com.projectpitang.contenthub.models.Person;
 import com.projectpitang.contenthub.repository.CastRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

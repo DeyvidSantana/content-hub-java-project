@@ -18,11 +18,14 @@ public class Program implements IObjectPersistent<Long> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "prog_cl_idapi")
+    private Long idApi;
+
     @Size(min = 1, max = 200)
     @Column(name = "prog_cl_title")
     private String title;
 
-    @Column(name = "prog_cl_overview")
+    @Column(name = "prog_cl_overview", length = 100000)
     private String overview;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, targetEntity = Cast.class)
@@ -37,9 +40,9 @@ public class Program implements IObjectPersistent<Long> {
     @Column(name = "prog_cl_language")
     private String language;
 
-    @Temporal(TemporalType.DATE)
+    //@Temporal(TemporalType.DATE)
     @Column(name = "prog_cl_releaseyear")
-    private Date releaseYear;
+    private String releaseYear;
 
     @Column(name = "prog_cl_runtime")
     private int runtime;
@@ -69,6 +72,14 @@ public class Program implements IObjectPersistent<Long> {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getIdApi() {
+        return idApi;
+    }
+
+    public void setIdApi(Long idApi) {
+        this.idApi = idApi;
     }
 
     public String getTitle() {
@@ -111,11 +122,11 @@ public class Program implements IObjectPersistent<Long> {
         this.language = language;
     }
 
-    public Date getReleaseYear() {
+    public String getReleaseYear() {
         return releaseYear;
     }
 
-    public void setReleaseYear(Date releaseYear) {
+    public void setReleaseYear(String releaseYear) {
         this.releaseYear = releaseYear;
     }
 
