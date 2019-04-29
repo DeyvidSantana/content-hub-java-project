@@ -1,4 +1,4 @@
-package com.projectpitang.contenthub.services;
+package com.projectpitang.contenthub.services.apiconsumption.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 

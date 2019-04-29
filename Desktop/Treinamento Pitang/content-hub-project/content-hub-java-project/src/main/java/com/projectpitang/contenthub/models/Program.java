@@ -25,7 +25,7 @@ public class Program implements IObjectPersistent<Long> {
     @Column(name = "prog_cl_title")
     private String title;
 
-    @Column(name = "prog_cl_overview", length = 100000)
+    @Column(name = "prog_cl_overview", length = 2000)
     private String overview;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true, targetEntity = Cast.class)

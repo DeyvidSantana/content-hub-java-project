@@ -1,4 +1,4 @@
-package com.projectpitang.contenthub.services;
+package com.projectpitang.contenthub.services.apiconsumption.models;
 
 import java.util.ArrayList;
 import java.util.List;
