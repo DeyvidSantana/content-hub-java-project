@@ -1,6 +1,7 @@
 package com.projectpitang.contenthub.services.apiconsumption;
 
 import com.projectpitang.contenthub.services.apiconsumption.models.ConvertedGenresList;
+import com.projectpitang.contenthub.services.apiconsumption.models.ConvertedMovieTvCastCrewList;
 import com.projectpitang.contenthub.services.apiconsumption.models.ConvertedMovieList;
 import com.projectpitang.contenthub.services.apiconsumption.models.ConvertedTvList;
 import com.projectpitang.contenthub.services.objectspersistence.ObjectsPersistence;
@@ -49,6 +50,16 @@ public class APIConsumption {
 
     private ConvertedGenresList getTvGenresListFromApi(){
         return restTemplate.getForObject(URL_GENRE_TV, ConvertedGenresList.class);
+    }
+
+    public ConvertedMovieTvCastCrewList getMovieCastCrewListFromApi(Long idMovie){
+        return restTemplate.getForObject(BASE_URL + "movie/" + idMovie +
+                URL_CREDITS + "?api_key=" + API_KEY, ConvertedMovieTvCastCrewList.class);
+    }
+
+    public ConvertedMovieTvCastCrewList getTvCastCrewListFromApi(Long idTv){
+        return restTemplate.getForObject(BASE_URL + "tv/" + idTv +
+                URL_CREDITS + "?api_key=" + API_KEY, ConvertedMovieTvCastCrewList.class);
     }
 
     private void buildObjectsFromApi(){

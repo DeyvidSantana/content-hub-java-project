@@ -1,10 +1,9 @@
 package com.projectpitang.contenthub.services.objectspersistence;
 
-import com.projectpitang.contenthub.models.Genre;
-import com.projectpitang.contenthub.models.Movie;
-import com.projectpitang.contenthub.models.TV;
+import com.projectpitang.contenthub.models.*;
 import com.projectpitang.contenthub.repository.GenreRepository;
 import com.projectpitang.contenthub.repository.ProgramRepository;
+import com.projectpitang.contenthub.services.apiconsumption.APIConsumption;
 import com.projectpitang.contenthub.services.apiconsumption.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -24,6 +23,9 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
 
     @Autowired
     private GenreRepository genreRepository;
+
+    @Autowired
+    private APIConsumption apiConsumption;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
@@ -59,6 +61,19 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
             }
             movie.setGenres(genres);
 
+            // Builds a cast object to set it into a movie
+            ConvertedMovieTvCastCrewList convertedMovieCastCrewList =
+                    apiConsumption.getMovieCastCrewListFromApi(convertedMovie.getId());
+
+            Cast castMovie = new Cast();
+            castMovie.setIdCreditApi(convertedMovieCastCrewList.getId());
+
+            List<Person> people = this.getPeopleFromMovieTvCastCrew(convertedMovieCastCrewList);
+
+            castMovie.setCast(people);
+
+            movie.setCast(castMovie);
+
             programRepository.save(movie);
         }
     }
@@ -91,6 +106,15 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
                 }
             }
             tv.setGenres(genres);
+
+            // Builds a cast object to set it into a tv
+            ConvertedMovieTvCastCrewList convertedTvCastCrewList =
+                    apiConsumption.getTvCastCrewListFromApi(convertedTv.getId());
+
+            Cast castTv = new Cast();
+            castTv.setIdCreditApi(convertedTvCastCrewList.getId());
+
+            tv.setCast(castTv);
 
             programRepository.save(tv);
         }
@@ -129,6 +153,37 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
             }
         }
 
+    }
+
+    public List<Person> getPeopleFromMovieTvCastCrew(ConvertedMovieTvCastCrewList convertedMovieCastCrewList){
+
+        List<Person> people = new ArrayList<>();
+
+        for (ConvertedCast person : convertedMovieCastCrewList.getCast()) {
+            Person newArtist = new Person();
+            newArtist.setName(person.getName());
+            newArtist.setIdApi(person.getId());
+            newArtist.setGender(person.getGender());
+            newArtist.setType("AR");
+            people.add(newArtist);
+        }
+
+        for (ConvertedCrew person : convertedMovieCastCrewList.getCrew()) {
+
+            Person newArtist = new Person();
+            newArtist.setName(person.getName());
+            newArtist.setIdApi(person.getId());
+
+            if(person.getJob().contains("Director")){
+                newArtist.setType("DI");
+            } else if(person.getJob().contains("Producer")){
+                newArtist.setType("AU");
+            }
+
+            people.add(newArtist);
+        }
+
+        return people;
     }
 
 }

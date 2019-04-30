@@ -20,6 +20,9 @@ public class Person implements IObjectPersistent<Long> {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(name = "per_cl_idapi")
+    private Long idApi;
+
     @Size(min = 1, max = 200)
     @Column(name = "per_cl_name")
     private String name;
@@ -63,6 +66,14 @@ public class Person implements IObjectPersistent<Long> {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getIdApi() {
+        return idApi;
+    }
+
+    public void setIdApi(Long idApi) {
+        this.idApi = idApi;
     }
 
     public String getName() {

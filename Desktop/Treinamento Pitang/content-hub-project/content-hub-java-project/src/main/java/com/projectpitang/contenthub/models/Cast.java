@@ -5,6 +5,7 @@ import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,6 +16,9 @@ public class Cast implements IObjectPersistent<Long> {
     @Column(name = "cast_cl_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @Column(name = "cast_cl_idcreditapi")
+    private Long idCreditApi;
 
     @Size(min = 1, max = 200)
     @Column(name = "cast_cl_name")
@@ -27,7 +31,7 @@ public class Cast implements IObjectPersistent<Long> {
     @JoinTable(name = "tb_cast_person",
                 joinColumns = @JoinColumn(referencedColumnName = "cast_cl_id"),
                 inverseJoinColumns = {@JoinColumn(referencedColumnName = "per_cl_id")})
-    private Set<Person> cast;
+    private List<Person> cast;
 
     @Override
     public boolean equals(Object o) {
@@ -58,6 +62,14 @@ public class Cast implements IObjectPersistent<Long> {
         this.name = name;
     }
 
+    public Long getIdCreditApi() {
+        return idCreditApi;
+    }
+
+    public void setIdCreditApi(Long idCreditApi) {
+        this.idCreditApi = idCreditApi;
+    }
+
     public Program getProgram() {
         return program;
     }
@@ -66,11 +78,11 @@ public class Cast implements IObjectPersistent<Long> {
         this.program = program;
     }
 
-    public Set<Person> getCast() {
+    public List<Person> getCast() {
         return cast;
     }
 
-    public void setCast(Set<Person> cast) {
+    public void setCast(List<Person> cast) {
         this.cast = cast;
     }
 }

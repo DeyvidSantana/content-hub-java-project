@@ -2,10 +2,11 @@ package com.projectpitang.contenthub.services.apiconsumption.models;
 
 import java.util.List;
 
-public class ConvertedMovieCastList {
+public class ConvertedMovieTvCastCrewList {
 
     private Long id;
     private List<ConvertedCast> cast;
+    private List<ConvertedCrew> crew;
 
     public Long getId() {
         return id;
@@ -21,5 +22,13 @@ public class ConvertedMovieCastList {
 
     public void setCast(List<ConvertedCast> cast) {
         this.cast = cast;
+    }
+
+    public List<ConvertedCrew> getCrew() {
+        return crew;
+    }
+
+    public void setCrew(List<ConvertedCrew> crew) {
+        this.crew = crew;
     }
 }
