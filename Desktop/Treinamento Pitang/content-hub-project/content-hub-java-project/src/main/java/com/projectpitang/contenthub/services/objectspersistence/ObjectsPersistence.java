@@ -32,7 +32,7 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
 
     }
 
-    public void persistMovieObjects(ConvertedMovieList convertedMovieList){
+    public void persistMovieObjects(ConvertedMovieList convertedMovieList) throws InterruptedException {
         // Persisting Movie objects
         for (ConvertedMovie convertedMovie: convertedMovieList.getResults()) {
             Movie movie = new Movie();
@@ -155,39 +155,78 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
 
     }
 
-    public List<Person> getPeopleFromMovieTvCastCrew(ConvertedMovieTvCastCrewList convertedMovieCastCrewList){
+    public List<Person> getPeopleFromMovieTvCastCrew(ConvertedMovieTvCastCrewList convertedMovieCastCrewList) throws InterruptedException {
 
         List<Person> people = new ArrayList<>();
 
+        int index = 0; // Limits a list to 3 objects
         for (ConvertedCast person : convertedMovieCastCrewList.getCast()) {
-            Person newArtist = new Artist();
-            newArtist.setName(person.getName());
-            newArtist.setIdApi(person.getId());
-            newArtist.setGender(person.getGender());
-            //newArtist.setType("AR");
-            people.add(newArtist);
+
+            Thread.sleep(400);
+
+            if(index <= 2){
+
+                ApiPerson apiPerson = apiConsumption.getPersonFromApi(person.getId());
+                Person completedPerson = this.buildCompletedPerson(person, apiPerson, "AR");
+
+                people.add(completedPerson);
+                index++;
+
+            } else {
+                break;
+            }
         }
 
+        index = 0; // Limits a list to 3 objects
         for (ConvertedCrew person : convertedMovieCastCrewList.getCrew()) {
 
-
             Person newArtist = null;
-            if(person.getJob().contains("Director")){
-                newArtist = new Director();
-                newArtist.setName(person.getName());
-                newArtist.setIdApi(person.getId());
-                newArtist.setType("DI");
-            } else if(person.getJob().contains("Producer")){
-                newArtist = new Author();
-                newArtist.setName(person.getName());
-                newArtist.setIdApi(person.getId());
-                newArtist.setType("AU");
+            if (index <= 2){
+                if(person.getJob().contains("Director")){
+                    newArtist = new Director();
+                    newArtist.setName(person.getName());
+                    newArtist.setIdApi(person.getId());
+                    index++;
+                } else if(person.getJob().contains("Producer")){
+                    newArtist = new Author();
+                    newArtist.setName(person.getName());
+                    newArtist.setIdApi(person.getId());
+                    index++;
+                }
+            } else {
+                break;
             }
 
             people.add(newArtist);
         }
 
         return people;
+    }
+
+    public Person buildCompletedPerson(ConvertedCast incompletedPerson, ApiPerson apiPerson, String type){
+        Person completedPerson = null;
+
+        switch (type){
+            case "AR":
+                completedPerson = new Artist();
+                break;
+            case "DI":
+                completedPerson = new Director();
+                break;
+            case "AU":
+                completedPerson = new Author();
+                break;
+        }
+
+        completedPerson.setName(incompletedPerson.getName());
+        completedPerson.setIdApi(incompletedPerson.getId());
+        completedPerson.setGender(incompletedPerson.getGender());
+        completedPerson.setCityBirth(apiPerson.getPlace_of_birth());
+        completedPerson.setCountryBirth(apiPerson.getPlace_of_birth());
+        completedPerson.setHeight(1.7);
+
+        return completedPerson;
+
     }
 
 }

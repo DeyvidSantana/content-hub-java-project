@@ -1,13 +1,12 @@
 package com.projectpitang.contenthub.services.apiconsumption;
 
-import com.projectpitang.contenthub.services.apiconsumption.models.ConvertedGenresList;
-import com.projectpitang.contenthub.services.apiconsumption.models.ConvertedMovieTvCastCrewList;
-import com.projectpitang.contenthub.services.apiconsumption.models.ConvertedMovieList;
-import com.projectpitang.contenthub.services.apiconsumption.models.ConvertedTvList;
+import com.projectpitang.contenthub.services.apiconsumption.models.*;
 import com.projectpitang.contenthub.services.objectspersistence.ObjectsPersistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.logging.Logger;
 
 @Component
 public class APIConsumption {
@@ -25,6 +24,8 @@ public class APIConsumption {
             API_KEY + "&language=" + LANGUAGE;
     // Credits
     private static final String URL_CREDITS = "/credits";
+
+    private static Logger logger = Logger.getLogger( APIConsumption.class.getName() );
 
     private ConvertedMovieList convertedMovieList;
     private ConvertedTvList convertedTvList;
@@ -62,6 +63,11 @@ public class APIConsumption {
                 URL_CREDITS + "?api_key=" + API_KEY, ConvertedMovieTvCastCrewList.class);
     }
 
+    public ApiPerson getPersonFromApi(Long idPerson){
+        return restTemplate.getForObject(BASE_URL + "person/" + idPerson + "?api_key=" +
+                API_KEY, ApiPerson.class);
+    }
+
     private void buildObjectsFromApi(){
         convertedMovieList = this.getMoviesListFromApi();
         convertedTvList = this.getTvsListFromApi();
@@ -69,13 +75,15 @@ public class APIConsumption {
         convertedTvGenresList = this.getTvGenresListFromApi();
     }
 
-    public void persistObjects(){
+    public void persistObjects() throws InterruptedException {
 
         this.buildObjectsFromApi();
 
         this.objectsPersistence.persistMovieObjects(convertedMovieList);
         this.objectsPersistence.persistTvObjects(convertedTvList);
         this.objectsPersistence.persistGenresObjects(convertedMovieGenresList, convertedTvGenresList);
+
+        //logger.log(Level.FINE, "All objects persisted!");
     }
 
 }

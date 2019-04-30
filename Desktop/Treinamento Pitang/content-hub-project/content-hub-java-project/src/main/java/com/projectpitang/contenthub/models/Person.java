@@ -34,7 +34,7 @@ public class Person implements IObjectPersistent<Long> {
     @Column(name = "per_cl_citybirth")
     private String cityBirth;
 
-    @Size(min = 1, max = 30)
+    @Size(min = 1, max = 100)
     @Column(name = "per_cl_countrybirth")
     private String countryBirth;
 
