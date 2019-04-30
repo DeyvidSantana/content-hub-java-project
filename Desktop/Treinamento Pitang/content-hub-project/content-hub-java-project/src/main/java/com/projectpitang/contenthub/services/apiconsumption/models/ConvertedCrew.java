@@ -1,7 +1,5 @@
 package com.projectpitang.contenthub.services.apiconsumption.models;
 
-import com.projectpitang.contenthub.utils.PersonGender;
-
 public class ConvertedCrew extends ConvertedCastCrew{
 
     private String department;

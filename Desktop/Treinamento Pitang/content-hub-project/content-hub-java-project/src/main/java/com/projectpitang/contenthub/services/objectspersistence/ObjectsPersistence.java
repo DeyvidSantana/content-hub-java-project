@@ -160,23 +160,27 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
         List<Person> people = new ArrayList<>();
 
         for (ConvertedCast person : convertedMovieCastCrewList.getCast()) {
-            Person newArtist = new Person();
+            Person newArtist = new Artist();
             newArtist.setName(person.getName());
             newArtist.setIdApi(person.getId());
             newArtist.setGender(person.getGender());
-            newArtist.setType("AR");
+            //newArtist.setType("AR");
             people.add(newArtist);
         }
 
         for (ConvertedCrew person : convertedMovieCastCrewList.getCrew()) {
 
-            Person newArtist = new Person();
-            newArtist.setName(person.getName());
-            newArtist.setIdApi(person.getId());
 
+            Person newArtist = null;
             if(person.getJob().contains("Director")){
+                newArtist = new Director();
+                newArtist.setName(person.getName());
+                newArtist.setIdApi(person.getId());
                 newArtist.setType("DI");
             } else if(person.getJob().contains("Producer")){
+                newArtist = new Author();
+                newArtist.setName(person.getName());
+                newArtist.setIdApi(person.getId());
                 newArtist.setType("AU");
             }
 
