@@ -1,6 +1,6 @@
 package com.projectpitang.contenthub.services.apiconsumption.models;
 
-public class ConvertedGenres {
+public class ApiGenres {
 
     private Long id;
     private String name;

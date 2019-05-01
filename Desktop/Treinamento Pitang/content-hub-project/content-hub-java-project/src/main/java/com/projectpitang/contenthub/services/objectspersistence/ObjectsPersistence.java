@@ -2,18 +2,16 @@ package com.projectpitang.contenthub.services.objectspersistence;
 
 import com.projectpitang.contenthub.models.*;
 import com.projectpitang.contenthub.repository.GenreRepository;
+import com.projectpitang.contenthub.repository.PersonRepository;
 import com.projectpitang.contenthub.repository.ProgramRepository;
-import com.projectpitang.contenthub.services.apiconsumption.APIConsumption;
+import com.projectpitang.contenthub.services.apiconsumption.ApiConsumption;
 import com.projectpitang.contenthub.services.apiconsumption.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 public class ObjectsPersistence implements ApplicationListener<ApplicationReadyEvent> {
@@ -25,31 +23,38 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
     private GenreRepository genreRepository;
 
     @Autowired
-    private APIConsumption apiConsumption;
+    private PersonRepository personRepository;
+
+    @Autowired
+    private ApiConsumption apiConsumption;
 
     @Override
     public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
 
     }
 
-    public void persistMovieObjects(ConvertedMovieList convertedMovieList) throws InterruptedException {
-        // Persisting Movie objects
-        for (ConvertedMovie convertedMovie: convertedMovieList.getResults()) {
-            Movie movie = new Movie();
-            movie.setIdApi(convertedMovie.getId());
-            movie.setTitle(convertedMovie.getTitle());
-            movie.setOverview(convertedMovie.getOverview());
-            movie.setLanguage(convertedMovie.getOriginal_language());
-            movie.setReleaseYear(convertedMovie.getRelease_date());
+    public void persistMovieObjects(ApiMovieList apiMovieList) throws InterruptedException {
+        System.out.println("\nStarting the persistence of the movies!");
 
-            Set<Genre> genres = new HashSet<Genre>();
-            for (int id: convertedMovie.getGenre_ids())
+        // Persisting Movie objects
+        for (ApiMovie apiMovie : apiMovieList.getResults()) {
+            Movie movie = new Movie();
+            movie.setIdApi(apiMovie.getId());
+            movie.setTitle(apiMovie.getTitle());
+            movie.setOverview(apiMovie.getOverview());
+            movie.setLanguage(apiMovie.getOriginal_language());
+            movie.setReleaseYear(apiMovie.getRelease_date());
+
+            List<Genre> genres = new ArrayList<>();
+            for (int id: apiMovie.getGenre_ids())
             {
 
                 boolean existsByIdApi = false;
+                Genre existingGenre = null;
                 for (Genre genre: genreRepository.findAll()) {
                     if(genre.getIdApi() == id){
                         existsByIdApi = true;
+                        existingGenre = genre;
                     }
                 }
 
@@ -57,13 +62,17 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
                     Genre genre = new Genre();
                     genre.setIdApi((long) id);
                     genres.add(genre);
+                }else{
+                    Genre genre = new Genre();
+                    genre.setId(existingGenre.getId());
+                    genres.add(genre);
                 }
             }
             movie.setGenres(genres);
 
             // Builds a cast object to set it into a movie
-            ConvertedMovieTvCastCrewList convertedMovieCastCrewList =
-                    apiConsumption.getMovieCastCrewListFromApi(convertedMovie.getId());
+            ApiMovieTvCastCrewList convertedMovieCastCrewList =
+                    apiConsumption.getMovieCastCrewListFromApi(apiMovie.getId());
 
             Cast castMovie = new Cast();
             castMovie.setIdCreditApi(convertedMovieCastCrewList.getId());
@@ -76,20 +85,25 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
 
             programRepository.save(movie);
         }
+
+        System.out.println("\nAll the movies were persisted, including their castings and people!");
+
     }
 
-    public void persistTvObjects(ConvertedTvList convertedTvList){
-        // Persisting Tv objects
-        for (ConvertedTv convertedTv: convertedTvList.getResults()) {
-            TV tv = new TV();
-            tv.setIdApi(convertedTv.getId());
-            tv.setTitle(convertedTv.getOriginal_name());
-            tv.setOverview(convertedTv.getOverview());
-            tv.setLanguage(convertedTv.getOriginal_language());
-            tv.setReleaseYear(convertedTv.getFirst_air_date());
+    public void persistTvObjects(ApiTvList convertedTvList) throws InterruptedException {
+        System.out.println("\nStarting the persistence of the tvs!");
 
-            Set<Genre> genres = new HashSet<Genre>();
-            for (int id: convertedTv.getGenre_ids())
+        // Persisting Tv objects
+        for (ApiTv apiTv : convertedTvList.getResults()) {
+            TV tv = new TV();
+            tv.setIdApi(apiTv.getId());
+            tv.setTitle(apiTv.getOriginal_name());
+            tv.setOverview(apiTv.getOverview());
+            tv.setLanguage(apiTv.getOriginal_language());
+            tv.setReleaseYear(apiTv.getFirst_air_date());
+
+            List<Genre> genres = new ArrayList<>();
+            for (int id: apiTv.getGenre_ids())
             {
 
                 boolean existsByIdApi = false;
@@ -108,27 +122,35 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
             tv.setGenres(genres);
 
             // Builds a cast object to set it into a tv
-            ConvertedMovieTvCastCrewList convertedTvCastCrewList =
-                    apiConsumption.getTvCastCrewListFromApi(convertedTv.getId());
+            ApiMovieTvCastCrewList convertedTvCastCrewList =
+                    apiConsumption.getTvCastCrewListFromApi(apiTv.getId());
 
             Cast castTv = new Cast();
             castTv.setIdCreditApi(convertedTvCastCrewList.getId());
 
+            List<Person> people = this.getPeopleFromMovieTvCastCrew(convertedTvCastCrewList);
+
+            castTv.setCast(people);
+
             tv.setCast(castTv);
 
             programRepository.save(tv);
+
         }
+
+        System.out.println("\nAll the tvs were persisted, including their castings and people!");
+
     }
 
-    public void persistGenresObjects(ConvertedGenresList convertedMovieGenresList,
-                                     ConvertedGenresList convertedTvGenresList){
+    public void persistGenresObjects(ApiGenresList convertedMovieGenresList,
+                                     ApiGenresList convertedTvGenresList){
 
-        List<ConvertedGenres> convertedGenresList = new ArrayList<ConvertedGenres>();
-        convertedGenresList.addAll(convertedMovieGenresList.getGenres());
-        convertedGenresList.addAll(convertedTvGenresList.getGenres());
+        List<ApiGenres> apiGenresList = new ArrayList<ApiGenres>();
+        apiGenresList.addAll(convertedMovieGenresList.getGenres());
+        apiGenresList.addAll(convertedTvGenresList.getGenres());
 
         // Persisting Genre objects
-        for (ConvertedGenres convertedGenre: convertedGenresList) {
+        for (ApiGenres convertedGenre: apiGenresList) {
 
             boolean existsByIdApi = false;
             Genre genreToUpdate = new Genre();
@@ -155,20 +177,19 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
 
     }
 
-    public List<Person> getPeopleFromMovieTvCastCrew(ConvertedMovieTvCastCrewList convertedMovieCastCrewList) throws InterruptedException {
+    public List<Person> getPeopleFromMovieTvCastCrew(ApiMovieTvCastCrewList apiMovieTvCastCrewList) throws InterruptedException {
 
         List<Person> people = new ArrayList<>();
 
         int index = 0; // Limits a list to 3 objects
-        for (ConvertedCast person : convertedMovieCastCrewList.getCast()) {
+        for (ApiCastCrew person : apiMovieTvCastCrewList.getCast()) {
 
-            Thread.sleep(400);
+            // Used to not exceed the number of requests allowed
+            Thread.sleep(300);
 
             if(index <= 2){
 
-                ApiPerson apiPerson = apiConsumption.getPersonFromApi(person.getId());
-                Person completedPerson = this.buildCompletedPerson(person, apiPerson, "AR");
-
+                Person completedPerson = getCompletePerson(person, "AR");
                 people.add(completedPerson);
                 index++;
 
@@ -178,32 +199,34 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
         }
 
         index = 0; // Limits a list to 3 objects
-        for (ConvertedCrew person : convertedMovieCastCrewList.getCrew()) {
+        for (ApiCastCrew person : apiMovieTvCastCrewList.getCrew()) {
 
-            Person newArtist = null;
+            Person completedPerson = null;
             if (index <= 2){
+
+                // Used to not exceed the number of requests allowed
+                Thread.sleep(300);
+
                 if(person.getJob().contains("Director")){
-                    newArtist = new Director();
-                    newArtist.setName(person.getName());
-                    newArtist.setIdApi(person.getId());
+                    completedPerson = this.getCompletePerson(person,"DI");
+                    people.add(completedPerson);
                     index++;
                 } else if(person.getJob().contains("Producer")){
-                    newArtist = new Author();
-                    newArtist.setName(person.getName());
-                    newArtist.setIdApi(person.getId());
+                    completedPerson = this.getCompletePerson(person,"AU");
+                    people.add(completedPerson);
                     index++;
                 }
+
             } else {
                 break;
             }
 
-            people.add(newArtist);
         }
 
         return people;
     }
 
-    public Person buildCompletedPerson(ConvertedCast incompletedPerson, ApiPerson apiPerson, String type){
+    public Person buildCompletedPersonBasedOnSavedPerson(ApiCastCrew incompletePerson, ApiPerson apiPerson, String type){
         Person completedPerson = null;
 
         switch (type){
@@ -218,15 +241,57 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
                 break;
         }
 
-        completedPerson.setName(incompletedPerson.getName());
-        completedPerson.setIdApi(incompletedPerson.getId());
-        completedPerson.setGender(incompletedPerson.getGender());
+        completedPerson.setName(incompletePerson.getName());
+        completedPerson.setIdApi(incompletePerson.getId());
+        completedPerson.setGender(incompletePerson.getGender());
         completedPerson.setCityBirth(apiPerson.getPlace_of_birth());
         completedPerson.setCountryBirth(apiPerson.getPlace_of_birth());
         completedPerson.setHeight(1.7);
+
+        Person savedPerson = personRepository.save(completedPerson);
+
+        Optional<Person> savedPersonWitId = personRepository.findById(savedPerson.getId());
+
+        completedPerson.setId(savedPersonWitId.get().getId());
 
         return completedPerson;
 
     }
 
+    public Person getCompletePerson(ApiCastCrew person, String type){
+
+        boolean existsByIdApi = false;
+        Person existingPerson = new Artist();
+        Person completedPerson = null;
+
+        for (Person personRepository: personRepository.findAll()) {
+            if(personRepository.getIdApi().equals(person.getId())){
+                existsByIdApi = true;
+                existingPerson = personRepository;
+            }
+        }
+
+
+        if(!existsByIdApi){
+            ApiPerson apiPerson = apiConsumption.getPersonFromApi(person.getId());
+            completedPerson = this.buildCompletedPersonBasedOnSavedPerson(person, apiPerson, type);
+        } else {
+
+            switch (type){
+                case "AR":
+                    completedPerson = new Artist();
+                    break;
+                case "DI":
+                    completedPerson = new Director();
+                    break;
+                case "AU":
+                    completedPerson = new Author();
+                    break;
+            }
+
+            completedPerson.setId(existingPerson.getId());
+        }
+
+        return completedPerson;
+    }
 }

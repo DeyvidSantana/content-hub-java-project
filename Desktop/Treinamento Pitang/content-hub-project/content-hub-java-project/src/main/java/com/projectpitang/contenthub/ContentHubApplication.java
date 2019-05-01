@@ -1,6 +1,6 @@
 package com.projectpitang.contenthub;
 
-import com.projectpitang.contenthub.services.apiconsumption.APIConsumption;
+import com.projectpitang.contenthub.services.apiconsumption.ApiConsumption;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class ContentHubApplication implements CommandLineRunner {
 
 	@Autowired
-	private APIConsumption apiConsumption;
+	private ApiConsumption apiConsumption;
 
 	public static void main(String[] args) {
 

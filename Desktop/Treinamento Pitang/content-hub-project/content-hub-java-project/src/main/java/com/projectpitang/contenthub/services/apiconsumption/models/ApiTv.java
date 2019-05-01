@@ -1,6 +1,6 @@
 package com.projectpitang.contenthub.services.apiconsumption.models;
 
-public class ConvertedTv {
+public class ApiTv {
 
     private Long id;
     private String original_name;

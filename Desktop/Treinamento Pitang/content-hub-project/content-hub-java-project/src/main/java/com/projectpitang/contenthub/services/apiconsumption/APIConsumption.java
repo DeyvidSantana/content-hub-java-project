@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.logging.Logger;
 
 @Component
-public class APIConsumption {
+public class ApiConsumption {
 
     private static final String API_KEY = "1b8c410632bbe9b59e1c774aa90c6694";
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
@@ -25,42 +25,42 @@ public class APIConsumption {
     // Credits
     private static final String URL_CREDITS = "/credits";
 
-    private static Logger logger = Logger.getLogger( APIConsumption.class.getName() );
+    private static Logger logger = Logger.getLogger( ApiConsumption.class.getName() );
 
-    private ConvertedMovieList convertedMovieList;
-    private ConvertedTvList convertedTvList;
-    private ConvertedGenresList convertedMovieGenresList;
-    private ConvertedGenresList convertedTvGenresList;
+    private ApiMovieList apiMovieList;
+    private ApiTvList convertedTvList;
+    private ApiGenresList convertedMovieGenresList;
+    private ApiGenresList convertedTvGenresList;
 
     @Autowired
     private ObjectsPersistence objectsPersistence;
 
     RestTemplate restTemplate = new RestTemplate();
 
-    private ConvertedMovieList getMoviesListFromApi(){
-        return restTemplate.getForObject(URL_MOVIES, ConvertedMovieList.class);
+    private ApiMovieList getMoviesListFromApi(){
+        return restTemplate.getForObject(URL_MOVIES, ApiMovieList.class);
     }
 
-    private ConvertedTvList getTvsListFromApi(){
-        return restTemplate.getForObject(URL_TVS, ConvertedTvList.class);
+    private ApiTvList getTvsListFromApi(){
+        return restTemplate.getForObject(URL_TVS, ApiTvList.class);
     }
 
-    private ConvertedGenresList getMovieGenresListFromApi(){
-        return restTemplate.getForObject(URL_GENRE_MOVIE, ConvertedGenresList.class);
+    private ApiGenresList getMovieGenresListFromApi(){
+        return restTemplate.getForObject(URL_GENRE_MOVIE, ApiGenresList.class);
     }
 
-    private ConvertedGenresList getTvGenresListFromApi(){
-        return restTemplate.getForObject(URL_GENRE_TV, ConvertedGenresList.class);
+    private ApiGenresList getTvGenresListFromApi(){
+        return restTemplate.getForObject(URL_GENRE_TV, ApiGenresList.class);
     }
 
-    public ConvertedMovieTvCastCrewList getMovieCastCrewListFromApi(Long idMovie){
+    public ApiMovieTvCastCrewList getMovieCastCrewListFromApi(Long idMovie){
         return restTemplate.getForObject(BASE_URL + "movie/" + idMovie +
-                URL_CREDITS + "?api_key=" + API_KEY, ConvertedMovieTvCastCrewList.class);
+                URL_CREDITS + "?api_key=" + API_KEY, ApiMovieTvCastCrewList.class);
     }
 
-    public ConvertedMovieTvCastCrewList getTvCastCrewListFromApi(Long idTv){
+    public ApiMovieTvCastCrewList getTvCastCrewListFromApi(Long idTv){
         return restTemplate.getForObject(BASE_URL + "tv/" + idTv +
-                URL_CREDITS + "?api_key=" + API_KEY, ConvertedMovieTvCastCrewList.class);
+                URL_CREDITS + "?api_key=" + API_KEY, ApiMovieTvCastCrewList.class);
     }
 
     public ApiPerson getPersonFromApi(Long idPerson){
@@ -69,7 +69,10 @@ public class APIConsumption {
     }
 
     private void buildObjectsFromApi(){
-        convertedMovieList = this.getMoviesListFromApi();
+
+        System.out.println("\nStarting consumption of The Movie DB API!");
+
+        apiMovieList = this.getMoviesListFromApi();
         convertedTvList = this.getTvsListFromApi();
         convertedMovieGenresList = this.getMovieGenresListFromApi();
         convertedTvGenresList = this.getTvGenresListFromApi();
@@ -79,11 +82,13 @@ public class APIConsumption {
 
         this.buildObjectsFromApi();
 
-        this.objectsPersistence.persistMovieObjects(convertedMovieList);
+        System.out.println("\nStarting persistence of data!");
+
+        this.objectsPersistence.persistMovieObjects(apiMovieList);
         this.objectsPersistence.persistTvObjects(convertedTvList);
         this.objectsPersistence.persistGenresObjects(convertedMovieGenresList, convertedTvGenresList);
 
-        //logger.log(Level.FINE, "All objects persisted!");
+        System.out.println("\nAll objects persisted!\n");
     }
 
 }

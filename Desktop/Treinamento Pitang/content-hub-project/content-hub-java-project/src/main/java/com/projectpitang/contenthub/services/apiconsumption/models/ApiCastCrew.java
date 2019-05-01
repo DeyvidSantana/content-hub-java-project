@@ -2,12 +2,15 @@ package com.projectpitang.contenthub.services.apiconsumption.models;
 
 import com.projectpitang.contenthub.utils.PersonGender;
 
-public abstract class ConvertedCastCrew {
+public class ApiCastCrew {
 
     private Long id;
     private String name;
     private PersonGender gender;
     private String profile_path;
+
+    private String department;
+    private String job;
 
     public Long getId() {
         return id;
@@ -39,5 +42,21 @@ public abstract class ConvertedCastCrew {
 
     public void setProfile_path(String profile_path) {
         this.profile_path = profile_path;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 }

@@ -1,6 +1,6 @@
 package com.projectpitang.contenthub.services.apiconsumption.models;
 
-public class ConvertedMovie {
+public class ApiMovie {
 
     private Long vote_count;
     private Long id;

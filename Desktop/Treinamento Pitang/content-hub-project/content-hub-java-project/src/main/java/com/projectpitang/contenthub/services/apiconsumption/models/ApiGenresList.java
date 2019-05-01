@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ConvertedGenresList {
+public class ApiGenresList {
 
-    private List<ConvertedGenres> genres = new ArrayList<ConvertedGenres>();
+    private List<ApiGenres> genres = new ArrayList<ApiGenres>();
 
-    public List<ConvertedGenres> getGenres() {
+    public List<ApiGenres> getGenres() {
         return genres;
     }
 
-    public void setGenres(List<ConvertedGenres> genres) {
+    public void setGenres(List<ApiGenres> genres) {
         this.genres = genres;
     }
 }

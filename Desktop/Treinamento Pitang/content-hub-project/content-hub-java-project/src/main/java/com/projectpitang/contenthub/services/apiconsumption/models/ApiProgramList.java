@@ -1,6 +1,6 @@
 package com.projectpitang.contenthub.services.apiconsumption.models;
 
-public abstract class ConvertedProgramList {
+public abstract class ApiProgramList {
 
     private int page;
     private Long total_results;

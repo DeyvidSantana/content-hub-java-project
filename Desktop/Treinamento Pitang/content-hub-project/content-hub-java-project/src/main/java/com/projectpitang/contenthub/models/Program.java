@@ -6,6 +6,7 @@ import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -51,7 +52,7 @@ public class Program implements IObjectPersistent<Long> {
     @JoinTable(name = "tb_program_genre",
             joinColumns = @JoinColumn(referencedColumnName = "prog_cl_id"),
             inverseJoinColumns = {@JoinColumn(referencedColumnName = "gen_cl_id")})
-    private Set<Genre> genres;
+    private List<Genre> genres;
 
     @Override
     public boolean equals(Object o) {
@@ -138,11 +139,11 @@ public class Program implements IObjectPersistent<Long> {
         this.runtime = runtime;
     }
 
-    public Set<Genre> getGenres() {
+    public List<Genre> getGenres() {
         return genres;
     }
 
-    public void setGenres(Set<Genre> genres) {
+    public void setGenres(List<Genre> genres) {
         this.genres = genres;
     }
 }
