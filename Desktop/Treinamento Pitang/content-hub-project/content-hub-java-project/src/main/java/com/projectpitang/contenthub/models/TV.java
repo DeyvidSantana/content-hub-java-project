@@ -13,4 +13,11 @@ public class TV extends Program{
     @Column(name = "tv_cl_seansons")
     private int seansons;
 
+    public int getSeansons() {
+        return seansons;
+    }
+
+    public void setSeansons(int seansons) {
+        this.seansons = seansons;
+    }
 }

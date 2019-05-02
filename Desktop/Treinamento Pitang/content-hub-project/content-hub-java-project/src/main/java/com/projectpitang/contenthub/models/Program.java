@@ -34,8 +34,8 @@ public class Program implements IObjectPersistent<Long> {
     private Cast cast;
 
     @Size(min = 1, max = 30)
-    @Column(name = "prog_cl_prodcountry")
-    private String productionCountry;
+    @Column(name = "prog_cl_origincountry")
+    private String originCountry;
 
     @Size(min = 1, max = 20)
     @Column(name = "prog_cl_language")
@@ -48,7 +48,7 @@ public class Program implements IObjectPersistent<Long> {
     @Column(name = "prog_cl_runtime")
     private int runtime;
 
-    @ManyToMany(cascade = CascadeType.ALL, targetEntity = Genre.class)
+    @ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Genre.class)
     @JoinTable(name = "tb_program_genre",
             joinColumns = @JoinColumn(referencedColumnName = "prog_cl_id"),
             inverseJoinColumns = {@JoinColumn(referencedColumnName = "gen_cl_id")})
@@ -107,12 +107,12 @@ public class Program implements IObjectPersistent<Long> {
         this.cast = cast;
     }
 
-    public String getProductionCountry() {
-        return productionCountry;
+    public String getOriginCountry() {
+        return originCountry;
     }
 
-    public void setProductionCountry(String productionCountry) {
-        this.productionCountry = productionCountry;
+    public void setOriginCountry(String originCountry) {
+        this.originCountry = originCountry;
     }
 
     public String getLanguage() {

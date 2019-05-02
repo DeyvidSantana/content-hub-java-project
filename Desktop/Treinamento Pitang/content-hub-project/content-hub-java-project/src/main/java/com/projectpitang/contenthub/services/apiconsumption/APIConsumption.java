@@ -37,16 +37,16 @@ public class ApiConsumption {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    private ApiMovieList getMoviesListFromApi(){
-        return restTemplate.getForObject(URL_MOVIES, ApiMovieList.class);
-    }
+    private ApiMovieList getMoviesListFromApi(){return restTemplate.getForObject(URL_MOVIES, ApiMovieList.class); }
 
     private ApiTvList getTvsListFromApi(){
+
+        String x = restTemplate.getForObject(URL_TVS, String.class);
+
         return restTemplate.getForObject(URL_TVS, ApiTvList.class);
     }
 
-    private ApiGenresList getMovieGenresListFromApi(){
-        return restTemplate.getForObject(URL_GENRE_MOVIE, ApiGenresList.class);
+    private ApiGenresList getMovieGenresListFromApi(){return restTemplate.getForObject(URL_GENRE_MOVIE, ApiGenresList.class);
     }
 
     private ApiGenresList getTvGenresListFromApi(){
@@ -70,7 +70,7 @@ public class ApiConsumption {
 
     private void buildObjectsFromApi(){
 
-        System.out.println("\nStarting consumption of The Movie DB API!");
+        System.out.println("\nStarting consumption of The Movie DB API...");
 
         apiMovieList = this.getMoviesListFromApi();
         convertedTvList = this.getTvsListFromApi();
@@ -82,7 +82,7 @@ public class ApiConsumption {
 
         this.buildObjectsFromApi();
 
-        System.out.println("\nStarting persistence of data!");
+        System.out.println("\nStarting persistence of data...");
 
         this.objectsPersistence.persistMovieObjects(apiMovieList);
         this.objectsPersistence.persistTvObjects(convertedTvList);

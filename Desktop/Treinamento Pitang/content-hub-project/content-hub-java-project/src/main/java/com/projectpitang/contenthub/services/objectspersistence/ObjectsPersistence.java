@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.*;
 
 @Component
-public class ObjectsPersistence implements ApplicationListener<ApplicationReadyEvent> {
+public class ObjectsPersistence {
 
     @Autowired
     private ProgramRepository programRepository;
@@ -28,13 +28,8 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
     @Autowired
     private ApiConsumption apiConsumption;
 
-    @Override
-    public void onApplicationEvent(ApplicationReadyEvent applicationReadyEvent) {
-
-    }
-
     public void persistMovieObjects(ApiMovieList apiMovieList) throws InterruptedException {
-        System.out.println("\nStarting the persistence of the movies!");
+        System.out.println("\nStarting the persistence of the movies...\n");
 
         // Persisting Movie objects
         for (ApiMovie apiMovie : apiMovieList.getResults()) {
@@ -45,29 +40,7 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
             movie.setLanguage(apiMovie.getOriginal_language());
             movie.setReleaseYear(apiMovie.getRelease_date());
 
-            List<Genre> genres = new ArrayList<>();
-            for (int id: apiMovie.getGenre_ids())
-            {
-
-                boolean existsByIdApi = false;
-                Genre existingGenre = null;
-                for (Genre genre: genreRepository.findAll()) {
-                    if(genre.getIdApi() == id){
-                        existsByIdApi = true;
-                        existingGenre = genre;
-                    }
-                }
-
-                if(!existsByIdApi){
-                    Genre genre = new Genre();
-                    genre.setIdApi((long) id);
-                    genres.add(genre);
-                }else{
-                    Genre genre = new Genre();
-                    genre.setId(existingGenre.getId());
-                    genres.add(genre);
-                }
-            }
+            List<Genre> genres = this.getGenresFromMovieTvGenresList(apiMovie);
             movie.setGenres(genres);
 
             // Builds a cast object to set it into a movie
@@ -91,7 +64,7 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
     }
 
     public void persistTvObjects(ApiTvList convertedTvList) throws InterruptedException {
-        System.out.println("\nStarting the persistence of the tvs!");
+        System.out.println("\nStarting the persistence of the tvs...\n");
 
         // Persisting Tv objects
         for (ApiTv apiTv : convertedTvList.getResults()) {
@@ -101,24 +74,8 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
             tv.setOverview(apiTv.getOverview());
             tv.setLanguage(apiTv.getOriginal_language());
             tv.setReleaseYear(apiTv.getFirst_air_date());
-
-            List<Genre> genres = new ArrayList<>();
-            for (int id: apiTv.getGenre_ids())
-            {
-
-                boolean existsByIdApi = false;
-                for (Genre genre: genreRepository.findAll()) {
-                    if(genre.getIdApi() == id){
-                        existsByIdApi = true;
-                    }
-                }
-
-                if(!existsByIdApi){
-                    Genre genre = new Genre();
-                    genre.setIdApi((long) id);
-                    genres.add(genre);
-                }
-            }
+            tv.setOriginCountry((apiTv.getOrigin_country()) != null ? apiTv.getOrigin_country()[0] : null);
+            List<Genre> genres = this.getGenresFromMovieTvGenresList(apiTv);
             tv.setGenres(genres);
 
             // Builds a cast object to set it into a tv
@@ -144,6 +101,8 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
 
     public void persistGenresObjects(ApiGenresList convertedMovieGenresList,
                                      ApiGenresList convertedTvGenresList){
+
+        System.out.println("\nStarting the update of the movie and tv genres...\n");
 
         List<ApiGenres> apiGenresList = new ArrayList<ApiGenres>();
         apiGenresList.addAll(convertedMovieGenresList.getGenres());
@@ -174,6 +133,8 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
                 genreRepository.save(genreUpdated);
             }
         }
+
+        System.out.println("\nAll the genres were updated!");
 
     }
 
@@ -293,5 +254,40 @@ public class ObjectsPersistence implements ApplicationListener<ApplicationReadyE
         }
 
         return completedPerson;
+    }
+
+    public List<Genre> getGenresFromMovieTvGenresList(ApiProgram apiProgram){
+
+        List<Genre> genres = new ArrayList<>();
+
+        for (int id: apiProgram.getGenre_ids())
+        {
+
+            boolean existsByIdApi = false;
+            Genre existingGenre = null;
+            for (Genre genre: genreRepository.findAll()) {
+                if(genre.getIdApi() == id){
+                    existsByIdApi = true;
+                    existingGenre = genre;
+                }
+            }
+
+            if(!existsByIdApi){
+                Genre genre = new Genre();
+                genre.setIdApi((long) id);
+
+                Genre savedGenre = genreRepository.save(genre);
+                Optional<Genre> savedGenreWitId = genreRepository.findById(savedGenre.getId());
+                genre.setId(savedGenreWitId.get().getId());
+
+                genres.add(genre);
+            }else{
+                Genre genre = new Genre();
+                genre.setId(existingGenre.getId());
+                genres.add(genre);
+            }
+        }
+
+        return genres;
     }
 }
