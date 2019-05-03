@@ -1,10 +1,9 @@
 package com.projectpitang.contenthub.controllers;
 
-import com.projectpitang.contenthub.models.Cast;
 import com.projectpitang.contenthub.models.Movie;
 import com.projectpitang.contenthub.models.Program;
 import com.projectpitang.contenthub.models.TV;
-import com.projectpitang.contenthub.repository.ProgramRepository;
+import com.projectpitang.contenthub.services.ProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,54 +12,54 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/program")
 public class ProgramController {
 
     @Autowired
-    private ProgramRepository programRepository;
+    private ProgramService programService;
 
-    public ProgramRepository getProgramRepository() {
-        return programRepository;
+    public ProgramService getProgramService() {
+        return programService;
     }
 
-    public void setProgramRepository(ProgramRepository programRepository) {
-        this.programRepository = programRepository;
+    public void setProgramService(ProgramService programService) {
+        this.programService = programService;
     }
 
     @GetMapping
     public ResponseEntity<?> getAll(Pageable pageable){
 
-        Page<Program> programs = this.programRepository.findAll(pageable);
+        Page<Program> programs = this.programService.getAll(pageable);
         return new ResponseEntity<>(programs, HttpStatus.OK);
-
-    }
-
-    @PostMapping("movie")
-    @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> createMovie(@Valid @RequestBody Movie movie){
-
-        this.programRepository.save(movie);
-        return new ResponseEntity<>(movie, HttpStatus.CREATED);
-
-    }
-
-    @PostMapping("tv")
-    @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> createTv(@Valid @RequestBody TV tv){
-
-        this.programRepository.save(tv);
-        return new ResponseEntity<>(tv, HttpStatus.CREATED);
 
     }
 
     @PutMapping
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> updateProgram(@RequestParam Long id, @RequestBody Cast programUpdated){
+    public ResponseEntity<?> updateMovie(@RequestParam Long id, @RequestBody Movie movie){
 
-        return null;
+        Movie movieUpdated = this.programService.updateMovie(id,movie);
+
+        if(movieUpdated != null){
+            return new ResponseEntity<>(movieUpdated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+    }
+
+    @PutMapping
+    @Transactional(rollbackFor = Exception.class)
+    public ResponseEntity<?> updateTv(@RequestParam Long id, @RequestBody TV tv){
+
+        TV tvUpdated = this.programService.updateTv(id,tv);
+
+        if(tvUpdated != null){
+            return new ResponseEntity<>(tvUpdated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
     }
 
@@ -68,12 +67,11 @@ public class ProgramController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> deleteProgram(@RequestBody Long id){
 
-        boolean programExists = this.programRepository.existsById(id);
+        boolean programExists = this.programService.deleteProgram(id);
         if(programExists){
-            this.programRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } else {
-            return null;
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
     }
