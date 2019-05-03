@@ -1,5 +1,6 @@
 package com.projectpitang.contenthub.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Objects;
 import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 import com.projectpitang.contenthub.utils.PersonGender;
@@ -9,10 +10,11 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
+@DiscriminatorValue("PE")
 @Table(name = "tb_person")
+@JsonIgnoreProperties({"cast"})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "per_cl_type", length = 2, discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue("PE")
 public class Person implements IObjectPersistent<Long> {
 
     @Id

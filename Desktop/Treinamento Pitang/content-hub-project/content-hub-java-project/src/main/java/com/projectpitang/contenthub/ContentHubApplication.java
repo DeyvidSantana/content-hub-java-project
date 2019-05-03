@@ -1,6 +1,6 @@
 package com.projectpitang.contenthub;
 
-import com.projectpitang.contenthub.services.apiconsumption.ApiConsumption;
+import com.projectpitang.contenthub.services.apiconsumption.ApiConsumptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +12,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class ContentHubApplication implements CommandLineRunner {
 
 	@Autowired
-	private ApiConsumption apiConsumption;
+	private ApiConsumptionService apiConsumptionService;
 
 	public static void main(String[] args) {
 
@@ -23,7 +23,7 @@ public class ContentHubApplication implements CommandLineRunner {
 	@Override
 	public void run(String...args) throws Exception{
 
-		this.apiConsumption.persistObjects();
+		//this.apiConsumptionService.persistObjects();
 
 	}
 

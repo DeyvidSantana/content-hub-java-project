@@ -4,17 +4,15 @@ import com.projectpitang.contenthub.models.*;
 import com.projectpitang.contenthub.repository.GenreRepository;
 import com.projectpitang.contenthub.repository.PersonRepository;
 import com.projectpitang.contenthub.repository.ProgramRepository;
-import com.projectpitang.contenthub.services.apiconsumption.ApiConsumption;
+import com.projectpitang.contenthub.services.apiconsumption.ApiConsumptionService;
 import com.projectpitang.contenthub.services.apiconsumption.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
 
 @Component
-public class ObjectsPersistence {
+public class ObjectsPersistenceService {
 
     @Autowired
     private ProgramRepository programRepository;
@@ -26,10 +24,10 @@ public class ObjectsPersistence {
     private PersonRepository personRepository;
 
     @Autowired
-    private ApiConsumption apiConsumption;
+    private ApiConsumptionService apiConsumptionService;
 
     public void persistMovieObjects(ApiMovieList apiMovieList) throws InterruptedException {
-        System.out.println("\nStarting the persistence of the movies...\n");
+        System.out.println("\nPersisting the movies. Please wait...\n");
 
         // Persisting Movie objects
         for (ApiMovie apiMovie : apiMovieList.getResults()) {
@@ -39,13 +37,21 @@ public class ObjectsPersistence {
             movie.setOverview(apiMovie.getOverview());
             movie.setLanguage(apiMovie.getOriginal_language());
             movie.setReleaseYear(apiMovie.getRelease_date());
+            movie.setPosterPath(apiMovie.getPoster_path());
+
+            // Used to pick up the original country information and movie runtime.
+            ApiMoreDetailsMovieTv apiMoreDetailsMovieTv = apiConsumptionService.getMoreDetailsMovie(apiMovie.getId());
+
+            movie.setRuntime(apiMoreDetailsMovieTv.getRuntime());
+            movie.setOriginCountry(apiMoreDetailsMovieTv.getProduction_countries().size() != 0 ?
+                    apiMoreDetailsMovieTv.getProduction_countries().get(0).getName() : null);
 
             List<Genre> genres = this.getGenresFromMovieTvGenresList(apiMovie);
             movie.setGenres(genres);
 
             // Builds a cast object to set it into a movie
             ApiMovieTvCastCrewList convertedMovieCastCrewList =
-                    apiConsumption.getMovieCastCrewListFromApi(apiMovie.getId());
+                    apiConsumptionService.getMovieCastCrewListFromApi(apiMovie.getId());
 
             Cast castMovie = new Cast();
             castMovie.setIdCreditApi(convertedMovieCastCrewList.getId());
@@ -64,7 +70,7 @@ public class ObjectsPersistence {
     }
 
     public void persistTvObjects(ApiTvList convertedTvList) throws InterruptedException {
-        System.out.println("\nStarting the persistence of the tvs...\n");
+        System.out.println("\nPersisting the tvs. Please wait...\n");
 
         // Persisting Tv objects
         for (ApiTv apiTv : convertedTvList.getResults()) {
@@ -74,13 +80,20 @@ public class ObjectsPersistence {
             tv.setOverview(apiTv.getOverview());
             tv.setLanguage(apiTv.getOriginal_language());
             tv.setReleaseYear(apiTv.getFirst_air_date());
-            tv.setOriginCountry((apiTv.getOrigin_country()) != null ? apiTv.getOrigin_country()[0] : null);
+            tv.setPosterPath(apiTv.getPoster_path());
+            tv.setOriginCountry(apiTv.getOrigin_country().size() != 0 ? apiTv.getOrigin_country().get(0) : null);
             List<Genre> genres = this.getGenresFromMovieTvGenresList(apiTv);
             tv.setGenres(genres);
 
+            // Used to pick up the original country information and movie runtime.
+            ApiMoreDetailsMovieTv apiMoreDetailsMovieTv = apiConsumptionService.getMoreDetailsTv(apiTv.getId());
+
+            tv.setSeansons(apiMoreDetailsMovieTv.getNumber_of_seasons());
+            tv.setRuntime(apiMoreDetailsMovieTv.getEpisode_run_time().size() != 0 ?
+                    apiMoreDetailsMovieTv.getEpisode_run_time().get(0) : 0);
             // Builds a cast object to set it into a tv
             ApiMovieTvCastCrewList convertedTvCastCrewList =
-                    apiConsumption.getTvCastCrewListFromApi(apiTv.getId());
+                    apiConsumptionService.getTvCastCrewListFromApi(apiTv.getId());
 
             Cast castTv = new Cast();
             castTv.setIdCreditApi(convertedTvCastCrewList.getId());
@@ -234,7 +247,7 @@ public class ObjectsPersistence {
 
 
         if(!existsByIdApi){
-            ApiPerson apiPerson = apiConsumption.getPersonFromApi(person.getId());
+            ApiPerson apiPerson = apiConsumptionService.getPersonFromApi(person.getId());
             completedPerson = this.buildCompletedPersonBasedOnSavedPerson(person, apiPerson, type);
         } else {
 

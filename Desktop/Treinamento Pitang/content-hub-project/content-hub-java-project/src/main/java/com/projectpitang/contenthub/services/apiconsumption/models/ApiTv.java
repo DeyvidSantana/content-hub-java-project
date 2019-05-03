@@ -1,9 +1,11 @@
 package com.projectpitang.contenthub.services.apiconsumption.models;
 
+import java.util.List;
+
 public class ApiTv extends ApiProgram{
 
     private String original_name;
-    private String[] origin_country;
+    private List<String> origin_country;
     private String first_air_date;
     private String backdrop_path;
     private String original_language;
@@ -17,11 +19,11 @@ public class ApiTv extends ApiProgram{
         this.original_name = original_name;
     }
 
-    public String[] getOrigin_country() {
+    public List<String> getOrigin_country() {
         return origin_country;
     }
 
-    public void setOrigin_country(String[] origin_country) {
+    public void setOrigin_country(List<String> origin_country) {
         this.origin_country = origin_country;
     }
 

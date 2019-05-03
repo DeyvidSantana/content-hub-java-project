@@ -1,5 +1,6 @@
 package com.projectpitang.contenthub.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Objects;
 import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
@@ -9,6 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "tb_genre")
+@JsonIgnoreProperties({"programs"})
 public class Genre implements IObjectPersistent<Long> {
 
     @Id

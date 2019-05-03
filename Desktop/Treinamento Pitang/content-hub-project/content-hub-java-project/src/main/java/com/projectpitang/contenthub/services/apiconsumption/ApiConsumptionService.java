@@ -1,15 +1,13 @@
 package com.projectpitang.contenthub.services.apiconsumption;
 
 import com.projectpitang.contenthub.services.apiconsumption.models.*;
-import com.projectpitang.contenthub.services.objectspersistence.ObjectsPersistence;
+import com.projectpitang.contenthub.services.objectspersistence.ObjectsPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.logging.Logger;
-
 @Component
-public class ApiConsumption {
+public class ApiConsumptionService {
 
     private static final String API_KEY = "1b8c410632bbe9b59e1c774aa90c6694";
     private static final String BASE_URL = "https://api.themoviedb.org/3/";
@@ -25,19 +23,22 @@ public class ApiConsumption {
     // Credits
     private static final String URL_CREDITS = "/credits";
 
-    private static Logger logger = Logger.getLogger( ApiConsumption.class.getName() );
-
     private ApiMovieList apiMovieList;
     private ApiTvList convertedTvList;
     private ApiGenresList convertedMovieGenresList;
     private ApiGenresList convertedTvGenresList;
 
     @Autowired
-    private ObjectsPersistence objectsPersistence;
+    private ObjectsPersistenceService objectsPersistenceService;
 
     RestTemplate restTemplate = new RestTemplate();
 
-    private ApiMovieList getMoviesListFromApi(){return restTemplate.getForObject(URL_MOVIES, ApiMovieList.class); }
+    private ApiMovieList getMoviesListFromApi(){
+
+        String x = restTemplate.getForObject(URL_MOVIES, String.class);
+
+        return restTemplate.getForObject(URL_MOVIES, ApiMovieList.class);
+    }
 
     private ApiTvList getTvsListFromApi(){
 
@@ -46,11 +47,22 @@ public class ApiConsumption {
         return restTemplate.getForObject(URL_TVS, ApiTvList.class);
     }
 
-    private ApiGenresList getMovieGenresListFromApi(){return restTemplate.getForObject(URL_GENRE_MOVIE, ApiGenresList.class);
+    private ApiGenresList getMovieGenresListFromApi(){
+        return restTemplate.getForObject(URL_GENRE_MOVIE, ApiGenresList.class);
     }
 
     private ApiGenresList getTvGenresListFromApi(){
         return restTemplate.getForObject(URL_GENRE_TV, ApiGenresList.class);
+    }
+
+    public ApiMoreDetailsMovieTv getMoreDetailsMovie(Long idMovie){
+        return restTemplate.getForObject(BASE_URL + "movie/" + idMovie + "?api_key=" + API_KEY,
+                ApiMoreDetailsMovieTv.class);
+    }
+
+    public ApiMoreDetailsMovieTv getMoreDetailsTv(Long idTv){
+        return restTemplate.getForObject(BASE_URL + "tv/" + idTv + "?api_key=" + API_KEY,
+                ApiMoreDetailsMovieTv.class);
     }
 
     public ApiMovieTvCastCrewList getMovieCastCrewListFromApi(Long idMovie){
@@ -84,9 +96,9 @@ public class ApiConsumption {
 
         System.out.println("\nStarting persistence of data...");
 
-        this.objectsPersistence.persistMovieObjects(apiMovieList);
-        this.objectsPersistence.persistTvObjects(convertedTvList);
-        this.objectsPersistence.persistGenresObjects(convertedMovieGenresList, convertedTvGenresList);
+        this.objectsPersistenceService.persistMovieObjects(apiMovieList);
+        this.objectsPersistenceService.persistTvObjects(convertedTvList);
+        this.objectsPersistenceService.persistGenresObjects(convertedMovieGenresList, convertedTvGenresList);
 
         System.out.println("\nAll objects persisted!\n");
     }

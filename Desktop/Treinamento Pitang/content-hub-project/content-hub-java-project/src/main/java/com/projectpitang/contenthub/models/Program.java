@@ -1,5 +1,6 @@
 package com.projectpitang.contenthub.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Objects;
 import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
@@ -7,10 +8,10 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "tb_program")
+@JsonIgnoreProperties({"genres"})
 @Inheritance(strategy = InheritanceType.JOINED)
 public class Program implements IObjectPersistent<Long> {
 
@@ -33,7 +34,7 @@ public class Program implements IObjectPersistent<Long> {
     @JoinColumn(name="cast_cl_id")
     private Cast cast;
 
-    @Size(min = 1, max = 30)
+    @Size(min = 1, max = 50)
     @Column(name = "prog_cl_origincountry")
     private String originCountry;
 
@@ -47,6 +48,9 @@ public class Program implements IObjectPersistent<Long> {
 
     @Column(name = "prog_cl_runtime")
     private int runtime;
+
+    @Column(name = "prog_cl_posterpath")
+    private String posterPath;
 
     @ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Genre.class)
     @JoinTable(name = "tb_program_genre",
@@ -137,6 +141,14 @@ public class Program implements IObjectPersistent<Long> {
 
     public void setRuntime(int runtime) {
         this.runtime = runtime;
+    }
+
+    public String getPosterPath() {
+        return posterPath;
+    }
+
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
     }
 
     public List<Genre> getGenres() {

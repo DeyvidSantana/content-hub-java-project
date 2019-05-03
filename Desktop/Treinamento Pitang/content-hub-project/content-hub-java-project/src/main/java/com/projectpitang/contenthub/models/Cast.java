@@ -1,15 +1,16 @@
 package com.projectpitang.contenthub.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Objects;
 import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "tb_cast")
+@JsonIgnoreProperties({"program","cast"})
 public class Cast implements IObjectPersistent<Long> {
 
     @Id
