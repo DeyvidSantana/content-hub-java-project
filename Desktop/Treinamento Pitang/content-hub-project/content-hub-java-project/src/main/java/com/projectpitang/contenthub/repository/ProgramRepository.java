@@ -14,6 +14,10 @@ public interface ProgramRepository extends JpaRepository<Program,Long> {
 
     public abstract List<Program> findByTitleLike(String title);
 
+    public abstract List<Program> findByLanguageLike(String language);
+
+    public abstract List<Program> findByReleaseYearLike(String releaseYear);
+
     public abstract Optional<Program> findById(Long id);
 
     public abstract void deleteById(Long id);

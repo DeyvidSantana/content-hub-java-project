@@ -17,6 +17,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/people")
+@CrossOrigin("http://localhost:4200")
 public class PersonController {
 
     @Autowired

@@ -1,7 +1,8 @@
 package com.projectpitang.contenthub.repository;
 
 import com.projectpitang.contenthub.models.Movie;
-import com.projectpitang.contenthub.models.Program;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -11,7 +12,11 @@ public interface MovieRepository extends JpaRepository<Movie,Long> {
 
     public abstract List<Movie> findAll();
 
-    public abstract List<Movie> findByTitleLike(String title);
+    public abstract Page<Movie> findByTitleContainingIgnoreCase(Pageable pageable, String title);
+
+    public abstract Page<Movie> findByLanguageLike(Pageable pageable, String language);
+
+    public abstract Page<Movie> findByReleaseYearLike(Pageable pageable, String releaseYear);
 
     public abstract Optional<Movie> findById(Long id);
 

@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -41,8 +42,52 @@ public class ProgramService {
         this.movieRepository = movieRepository;
     }
 
+    public TvRepository getTvRepository() {
+        return tvRepository;
+    }
+
+    public void setTvRepository(TvRepository tvRepository) {
+        this.tvRepository = tvRepository;
+    }
+
     public Page<Program> getAll(Pageable pageable){
         return this.programRepository.findAll(pageable);
+    }
+
+    public List<Program> findProgramByTitle(String title){
+
+        List<Program> programs = this.findProgramByTitle(title);
+
+        if(programs.size() != 0){
+            return programs;
+        } else {
+            return null;
+        }
+
+    }
+
+    public List<Program> findProgramByLanguage(String language){
+
+        List<Program> programs = this.findProgramByLanguage(language);
+
+        if(programs.size() != 0){
+            return programs;
+        } else {
+            return null;
+        }
+
+    }
+
+    public List<Program> findProgramByDate(String date){
+
+        List<Program> programs = this.programRepository.findByReleaseYearLike(date);
+
+        if(programs.size() != 0){
+            return programs;
+        } else {
+            return null;
+        }
+
     }
 
     public Movie updateMovie(Long id, Movie movie){
