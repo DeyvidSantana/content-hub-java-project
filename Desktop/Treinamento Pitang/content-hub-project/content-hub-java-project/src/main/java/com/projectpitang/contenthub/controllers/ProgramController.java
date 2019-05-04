@@ -2,6 +2,7 @@ package com.projectpitang.contenthub.controllers;
 
 import com.projectpitang.contenthub.dto.MovieDTO;
 import com.projectpitang.contenthub.dto.TvDTO;
+import com.projectpitang.contenthub.error.ResourceNotFoundException;
 import com.projectpitang.contenthub.models.Movie;
 import com.projectpitang.contenthub.models.TV;
 import com.projectpitang.contenthub.services.ProgramService;
@@ -132,10 +133,10 @@ public class ProgramController {
         Movie movieUpdated = this.programService.updateMovie(id, movieDTO.transformToMovie());
 
         if(movieUpdated != null){
-            return new ResponseEntity<>(movieUpdated, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(movieUpdated.transformToMovieDTO(), HttpStatus.OK);
         }
+
+        throw new ResourceNotFoundException("There is no movie with this id to be updated!");
 
     }
 
@@ -146,10 +147,10 @@ public class ProgramController {
         TV tvUpdated = this.programService.updateTv(id, tvDTO.transformToTv());
 
         if(tvUpdated != null){
-            return new ResponseEntity<>(tvUpdated, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(tvUpdated.transformToTvDTO(), HttpStatus.OK);
         }
+
+        throw new ResourceNotFoundException("There is no tv with this id to be updated!");
 
     }
 
@@ -157,12 +158,13 @@ public class ProgramController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> deleteMovie(@RequestBody Long id){
 
-        boolean movieExists = this.programService.deleteMovie(id);
-        if(movieExists){
+        boolean movieDeleted = this.programService.deleteMovie(id);
+
+        if(movieDeleted){
             return new ResponseEntity<>(id, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        throw new ResourceNotFoundException("There is no movie with this id to be deleted!");
 
     }
 
@@ -170,12 +172,13 @@ public class ProgramController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> deleteTv(@RequestBody Long id){
 
-        boolean tvExists = this.programService.deleteTv(id);
-        if(tvExists){
+        boolean tvDeleted = this.programService.deleteTv(id);
+
+        if(tvDeleted){
             return new ResponseEntity<>(id, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        throw new ResourceNotFoundException("There is no tv with this id to be deleted!");
 
     }
 }

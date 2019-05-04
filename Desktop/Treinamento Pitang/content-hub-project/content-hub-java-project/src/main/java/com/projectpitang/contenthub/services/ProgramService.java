@@ -80,9 +80,10 @@ public class ProgramService {
 
     public Movie updateMovie(Long id, Movie movie){
 
-        Optional<Movie> movieToBeUpdated = this.iMovieRepository.findById(id);
+        boolean movieExists = this.iMovieRepository.existsById(id);
 
-        if(movieToBeUpdated != null){
+        if(movieExists){
+            Optional<Movie> movieToBeUpdated = this.iMovieRepository.findById(id);
             movieToBeUpdated.get().setId(id);
             movieToBeUpdated.get().setTitle(movie.getTitle());
             movieToBeUpdated.get().setOverview(movie.getOverview());
@@ -156,10 +157,10 @@ public class ProgramService {
 
     public TV updateTv(Long id, TV tv){
 
-        Optional<TV> tvToBeUpdated = this.iTvRepository.findById(id);
+        boolean tvExists = this.iTvRepository.existsById(id);
 
-        if(tvToBeUpdated != null){
-
+        if(tvExists){
+            Optional<TV> tvToBeUpdated = this.iTvRepository.findById(id);
             tvToBeUpdated.get().setId(id);
             tvToBeUpdated.get().setTitle(tv.getTitle());
             tvToBeUpdated.get().setOverview(tv.getOverview());
