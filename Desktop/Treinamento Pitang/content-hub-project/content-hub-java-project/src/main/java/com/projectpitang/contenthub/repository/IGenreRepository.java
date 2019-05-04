@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface GenreRepository extends JpaRepository<Genre,Long> {
+public interface IGenreRepository extends JpaRepository<Genre,Long> {
 
     public abstract List<Genre> findAll();
 

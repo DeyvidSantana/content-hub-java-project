@@ -1,7 +1,7 @@
-package com.projectpitang.contenthub.services.apiconsumption;
+package com.projectpitang.contenthub.services.api.consumption;
 
-import com.projectpitang.contenthub.services.apiconsumption.models.*;
-import com.projectpitang.contenthub.services.objectspersistence.ObjectsPersistenceService;
+import com.projectpitang.contenthub.services.api.consumption.models.*;
+import com.projectpitang.contenthub.services.objects.persistence.ObjectsPersistenceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

@@ -1,11 +1,9 @@
-package com.projectpitang.contenthub.services.objectspersistence;
+package com.projectpitang.contenthub.services.objects.persistence;
 
 import com.projectpitang.contenthub.models.*;
-import com.projectpitang.contenthub.repository.GenreRepository;
-import com.projectpitang.contenthub.repository.PersonRepository;
-import com.projectpitang.contenthub.repository.ProgramRepository;
-import com.projectpitang.contenthub.services.apiconsumption.ApiConsumptionService;
-import com.projectpitang.contenthub.services.apiconsumption.models.*;
+import com.projectpitang.contenthub.repository.*;
+import com.projectpitang.contenthub.services.api.consumption.ApiConsumptionService;
+import com.projectpitang.contenthub.services.api.consumption.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -18,10 +16,16 @@ public class ObjectsPersistenceService {
     private ProgramRepository programRepository;
 
     @Autowired
-    private GenreRepository genreRepository;
+    private IMovieRepository iMovieRepository;
 
     @Autowired
-    private PersonRepository personRepository;
+    private ITvRepository iTvRepository;
+
+    @Autowired
+    private IGenreRepository iGenreRepository;
+
+    @Autowired
+    private IPersonRepository iPersonRepository;
 
     @Autowired
     private ApiConsumptionService apiConsumptionService;
@@ -62,7 +66,9 @@ public class ObjectsPersistenceService {
 
             movie.setCast(castMovie);
 
-            programRepository.save(movie);
+            //programRepository.save(movie);
+            iMovieRepository.save(movie);
+
         }
 
         System.out.println("\nAll the movies were persisted, including their castings and people!");
@@ -104,7 +110,8 @@ public class ObjectsPersistenceService {
 
             tv.setCast(castTv);
 
-            programRepository.save(tv);
+            //programRepository.save(tv);
+            iTvRepository.save(tv);
 
         }
 
@@ -128,7 +135,7 @@ public class ObjectsPersistenceService {
             Genre genreToUpdate = new Genre();
             Genre genreUpdated = new Genre();
 
-            for (Genre genre: genreRepository.findAll()) {
+            for (Genre genre: iGenreRepository.findAll()) {
                 if(genre.getIdApi() == convertedGenre.getId()){
                     existsByIdApi = true;
                     genreToUpdate = genre;
@@ -139,11 +146,11 @@ public class ObjectsPersistenceService {
                 genreUpdated.setId(genreToUpdate.getId());
                 genreUpdated.setIdApi(genreToUpdate.getIdApi());
                 genreUpdated.setName(convertedGenre.getName());
-                genreRepository.save(genreUpdated);
+                iGenreRepository.save(genreUpdated);
             } else {
                 genreUpdated.setIdApi(convertedGenre.getId());
                 genreUpdated.setName(convertedGenre.getName());
-                genreRepository.save(genreUpdated);
+                iGenreRepository.save(genreUpdated);
             }
         }
 
@@ -218,13 +225,13 @@ public class ObjectsPersistenceService {
         completedPerson.setName(incompletePerson.getName());
         completedPerson.setIdApi(incompletePerson.getId());
         completedPerson.setGender(incompletePerson.getGender());
-        completedPerson.setCityBirth(apiPerson.getPlace_of_birth());
-        completedPerson.setCountryBirth(apiPerson.getPlace_of_birth());
+        completedPerson.setHometown(apiPerson.getPlace_of_birth());
+        completedPerson.setHomeCountry(apiPerson.getPlace_of_birth());
         completedPerson.setHeight(1.7);
 
-        Person savedPerson = personRepository.save(completedPerson);
+        Person savedPerson = iPersonRepository.save(completedPerson);
 
-        Optional<Person> savedPersonWitId = personRepository.findById(savedPerson.getId());
+        Optional<Person> savedPersonWitId = iPersonRepository.findById(savedPerson.getId());
 
         completedPerson.setId(savedPersonWitId.get().getId());
 
@@ -238,7 +245,7 @@ public class ObjectsPersistenceService {
         Person existingPerson = new Artist();
         Person completedPerson = null;
 
-        for (Person personRepository: personRepository.findAll()) {
+        for (Person personRepository: iPersonRepository.findAll()) {
             if(personRepository.getIdApi().equals(person.getId())){
                 existsByIdApi = true;
                 existingPerson = personRepository;
@@ -278,7 +285,7 @@ public class ObjectsPersistenceService {
 
             boolean existsByIdApi = false;
             Genre existingGenre = null;
-            for (Genre genre: genreRepository.findAll()) {
+            for (Genre genre: iGenreRepository.findAll()) {
                 if(genre.getIdApi() == id){
                     existsByIdApi = true;
                     existingGenre = genre;
@@ -289,8 +296,8 @@ public class ObjectsPersistenceService {
                 Genre genre = new Genre();
                 genre.setIdApi((long) id);
 
-                Genre savedGenre = genreRepository.save(genre);
-                Optional<Genre> savedGenreWitId = genreRepository.findById(savedGenre.getId());
+                Genre savedGenre = iGenreRepository.save(genre);
+                Optional<Genre> savedGenreWitId = iGenreRepository.findById(savedGenre.getId());
                 genre.setId(savedGenreWitId.get().getId());
 
                 genres.add(genre);

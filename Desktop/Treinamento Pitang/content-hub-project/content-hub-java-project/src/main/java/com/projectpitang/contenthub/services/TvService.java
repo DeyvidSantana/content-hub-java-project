@@ -1,38 +1,37 @@
 package com.projectpitang.contenthub.services;
 
 import com.projectpitang.contenthub.models.TV;
-import com.projectpitang.contenthub.repository.TvRepository;
+import com.projectpitang.contenthub.repository.ITvRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TvService {
 
     @Autowired
-    private TvRepository tvRepository;
+    private ITvRepository iTvRepository;
 
-    public TvRepository getTvRepository() {
-        return tvRepository;
+    public ITvRepository getiTvRepository() {
+        return iTvRepository;
     }
 
-    public void setTvRepository(TvRepository tvRepository) {
-        this.tvRepository = tvRepository;
+    public void setiTvRepository(ITvRepository iTvRepository) {
+        this.iTvRepository = iTvRepository;
     }
 
     public Page<TV> getAll(Pageable pageable){
-        return this.tvRepository.findAll(pageable);
+        return this.iTvRepository.findAll(pageable);
     }
 
-    public List<TV> findTvByTitle(String title){
+    public Page<TV> findTvByTitle(Pageable pageable, String title){
 
-        List<TV> tvs = this.tvRepository.findByTitleLike(title);
+        Page<TV> tvs = this.iTvRepository.findByTitleContainingIgnoreCase(pageable, title);
 
-        if(tvs.size() != 0){
+        if(tvs != null){
             return tvs;
         } else {
             return null;
@@ -40,11 +39,11 @@ public class TvService {
 
     }
 
-    public List<TV> findTvByLanguage(String language){
+    public Page<TV> findTvByLanguage(Pageable pageable, String language){
 
-        List<TV> tvs = this.tvRepository.findByLanguageLike(language);
+        Page<TV> tvs = this.iTvRepository.findByLanguageLike(pageable, language);
 
-        if(tvs.size() != 0){
+        if(tvs != null){
             return tvs;
         } else {
             return null;
@@ -52,11 +51,11 @@ public class TvService {
 
     }
 
-    public List<TV> findTvByDate(String date){
+    public Page<TV> findTvByDate(Pageable pageable, String date){
 
-        List<TV> tvs = this.tvRepository.findByReleaseYearLike(date);
+        Page<TV> tvs = this.iTvRepository.findByReleaseYearLike(pageable, date);
 
-        if(tvs.size() != 0){
+        if(tvs != null){
             return tvs;
         } else {
             return null;
@@ -66,22 +65,21 @@ public class TvService {
 
     public TV updateTv(Long id, TV tv){
 
-        Optional<TV> tvToBeUpdated = this.tvRepository.findById(id);
+        Optional<TV> tvToBeUpdated = this.iTvRepository.findById(id);
 
         if(tvToBeUpdated != null){
-            TV tvUpdated = new TV();
-            tvUpdated.setId(tvToBeUpdated.get().getId());
-            tvUpdated.setIdApi(tvToBeUpdated.get().getIdApi());
-            tvUpdated.setTitle(tvToBeUpdated.get().getTitle());
-            tvUpdated.setOverview(tvToBeUpdated.get().getOverview());
-            tvUpdated.setOriginCountry(tvToBeUpdated.get().getOriginCountry());
-            tvUpdated.setLanguage(tvToBeUpdated.get().getLanguage());
-            tvUpdated.setReleaseYear(tvToBeUpdated.get().getReleaseYear());
-            tvUpdated.setRuntime(tvToBeUpdated.get().getRuntime());
 
-            this.tvRepository.save(tvUpdated);
+            tvToBeUpdated.get().setId(id);
+            tvToBeUpdated.get().setTitle(tv.getTitle());
+            tvToBeUpdated.get().setOverview(tv.getOverview());
+            tvToBeUpdated.get().setOriginCountry(tv.getOriginCountry());
+            tvToBeUpdated.get().setLanguage(tv.getLanguage());
+            tvToBeUpdated.get().setReleaseYear(tv.getReleaseYear());
+            tvToBeUpdated.get().setRuntime(tv.getRuntime());
 
-            return tvUpdated;
+            this.iTvRepository.save(tvToBeUpdated.get());
+
+            return tvToBeUpdated.get();
         } else {
             return null;
         }
@@ -90,9 +88,9 @@ public class TvService {
 
     public boolean deleteTv(Long id){
 
-        boolean tvExists = this.tvRepository.existsById(id);
+        boolean tvExists = this.iTvRepository.existsById(id);
         if(tvExists){
-            this.tvRepository.deleteById(id);
+            this.iTvRepository.deleteById(id);
             return true;
         } else {
             return false;

@@ -1,36 +1,35 @@
 package com.projectpitang.contenthub.services;
 
 import com.projectpitang.contenthub.models.Movie;
-import com.projectpitang.contenthub.repository.MovieRepository;
+import com.projectpitang.contenthub.repository.IMovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class MovieService {
 
     @Autowired
-    private MovieRepository movieRepository;
+    private IMovieRepository iMovieRepository;
 
-    public MovieRepository getMovieRepository() {
-        return movieRepository;
+    public IMovieRepository getiMovieRepository() {
+        return iMovieRepository;
     }
 
-    public void setMovieRepository(MovieRepository movieRepository) {
-        this.movieRepository = movieRepository;
+    public void setiMovieRepository(IMovieRepository iMovieRepository) {
+        this.iMovieRepository = iMovieRepository;
     }
 
     public Page<Movie> getAll(Pageable pageable){
-        return this.movieRepository.findAll(pageable);
+        return this.iMovieRepository.findAll(pageable);
     }
 
     public Page<Movie> findMovieByTitle(Pageable pageable, String title){
 
-        Page<Movie> movies = this.movieRepository.findByTitleContainingIgnoreCase(pageable, title);
+        Page<Movie> movies = this.iMovieRepository.findByTitleContainingIgnoreCase(pageable, title);
 
         if(movies != null){
             return movies;
@@ -42,7 +41,7 @@ public class MovieService {
 
     public Page<Movie> findMovieByLanguage(Pageable pageable, String language){
 
-        Page<Movie> movies = this.movieRepository.findByLanguageLike(pageable, language);
+        Page<Movie> movies = this.iMovieRepository.findByLanguageLike(pageable, language);
 
         if(movies != null){
             return movies;
@@ -54,7 +53,7 @@ public class MovieService {
 
     public Page<Movie> findMovieByDate(Pageable pageable, String date){
 
-        Page<Movie> movies = this.movieRepository.findByReleaseYearLike(pageable, date);
+        Page<Movie> movies = this.iMovieRepository.findByReleaseYearLike(pageable, date);
 
         if(movies != null){
             return movies;
@@ -66,11 +65,10 @@ public class MovieService {
 
     public Movie updateMovie(Long id, Movie movie){
 
-        Optional<Movie> movieToBeUpdated = this.movieRepository.findById(id);
+        Optional<Movie> movieToBeUpdated = this.iMovieRepository.findById(id);
 
         if(movieToBeUpdated != null){
-            movieToBeUpdated.get().setId(movie.getId());
-            movieToBeUpdated.get().setIdApi(movie.getIdApi());
+            movieToBeUpdated.get().setId(id);
             movieToBeUpdated.get().setTitle(movie.getTitle());
             movieToBeUpdated.get().setOverview(movie.getOverview());
             movieToBeUpdated.get().setOriginCountry(movie.getOriginCountry());
@@ -78,7 +76,7 @@ public class MovieService {
             movieToBeUpdated.get().setReleaseYear(movie.getReleaseYear());
             movieToBeUpdated.get().setRuntime(movie.getRuntime());
 
-            this.movieRepository.save(movieToBeUpdated.get());
+            this.iMovieRepository.save(movieToBeUpdated.get());
 
             return movieToBeUpdated.get();
         } else {
@@ -89,9 +87,9 @@ public class MovieService {
 
     public boolean deleteMovie(Long id){
 
-        boolean movieExists = this.movieRepository.existsById(id);
+        boolean movieExists = this.iMovieRepository.existsById(id);
         if(movieExists){
-            this.movieRepository.deleteById(id);
+            this.iMovieRepository.deleteById(id);
             return true;
         } else {
             return false;

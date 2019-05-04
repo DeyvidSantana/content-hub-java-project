@@ -1,10 +1,8 @@
 package com.projectpitang.contenthub.controllers;
 
-import com.projectpitang.contenthub.models.Artist;
-import com.projectpitang.contenthub.models.Author;
-import com.projectpitang.contenthub.models.Director;
+import com.projectpitang.contenthub.dto.PersonDTO;
 import com.projectpitang.contenthub.models.Person;
-import com.projectpitang.contenthub.repository.PersonRepository;
+import com.projectpitang.contenthub.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,64 +11,54 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/people")
 @CrossOrigin("http://localhost:4200")
 public class PersonController {
 
     @Autowired
-    private PersonRepository personRepository;
+    private PersonService personService;
 
-    public PersonRepository getPersonRepository() {
-        return personRepository;
+    public PersonService getPersonService() {
+        return personService;
     }
 
-    public void setPersonRepository(PersonRepository personRepository) {
-        this.personRepository = personRepository;
+    public void setPersonService(PersonService personService) {
+        this.personService = personService;
     }
 
     @GetMapping
     public ResponseEntity<?> getAll(Pageable pageable){
 
-        Page<Person> people = this.personRepository.findAll(pageable);
+        Page<Person> people = this.personService.getAll(pageable);
         return new ResponseEntity<>(people, HttpStatus.OK);
 
     }
 
-    @PostMapping("/artist")
-    @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> createArtist(@Valid @RequestBody Artist artist){
+    @GetMapping("name/{name}")
+    public ResponseEntity<?> findPersonByName(Pageable pageable, @PathVariable String name){
 
-        this.personRepository.save(artist);
-        return new ResponseEntity<>(artist, HttpStatus.CREATED);
+        Page<Person> people = this.personService.findPersonByName(pageable, name);
 
+        if(people != null){
+            return new ResponseEntity<>(people, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @PostMapping("/author")
-    @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> createAuthor(@Valid @RequestBody Author author){
-
-        this.personRepository.save(author);
-        return new ResponseEntity<>(author, HttpStatus.CREATED);
-
-    }
-
-    @PostMapping("director")
-    @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> createDirector(@Valid @RequestBody Director director){
-
-        this.personRepository.save(director);
-        return new ResponseEntity<>(director, HttpStatus.CREATED);
-
-    }
 
     @PutMapping
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> updatePerson(@RequestParam Long id, @RequestBody Director directorUpdated){
+    public ResponseEntity<?> updatePerson(@RequestParam Long id, @RequestBody PersonDTO personDTO){
 
-        return null;
+        Person personUpdated = this.personService.updatePerson(id,personDTO.transformToPerson());
+
+        if(personUpdated != null){
+            return new ResponseEntity<>(personUpdated, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
 
     }
 
@@ -78,9 +66,8 @@ public class PersonController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> deletePerson(@RequestBody Long id){
 
-        boolean personExists = this.personRepository.existsById(id);
+        boolean personExists = this.personService.deletePerson(id);
         if(personExists){
-            this.personRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } else {
             return null;

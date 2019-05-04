@@ -1,6 +1,6 @@
 package com.projectpitang.contenthub;
 
-import com.projectpitang.contenthub.services.apiconsumption.ApiConsumptionService;
+import com.projectpitang.contenthub.services.api.consumption.ApiConsumptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,7 +23,7 @@ public class ContentHubApplication implements CommandLineRunner {
 	@Override
 	public void run(String...args) throws Exception{
 
-		//this.apiConsumptionService.persistObjects();
+		this.apiConsumptionService.persistObjects();
 
 	}
 

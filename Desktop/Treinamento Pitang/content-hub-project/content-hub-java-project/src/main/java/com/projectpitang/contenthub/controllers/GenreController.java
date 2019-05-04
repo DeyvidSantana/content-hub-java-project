@@ -1,9 +1,7 @@
 package com.projectpitang.contenthub.controllers;
 
-import com.projectpitang.contenthub.models.Cast;
 import com.projectpitang.contenthub.models.Genre;
-import com.projectpitang.contenthub.models.Person;
-import com.projectpitang.contenthub.repository.GenreRepository;
+import com.projectpitang.contenthub.repository.IGenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,20 +17,20 @@ import javax.validation.Valid;
 public class GenreController {
 
     @Autowired
-    private GenreRepository genreRepository;
+    private IGenreRepository IGenreRepository;
 
-    public GenreRepository getGenreRepository() {
-        return genreRepository;
+    public IGenreRepository getIGenreRepository() {
+        return IGenreRepository;
     }
 
-    public void setGenreRepository(GenreRepository genreRepository) {
-        this.genreRepository = genreRepository;
+    public void setIGenreRepository(IGenreRepository IGenreRepository) {
+        this.IGenreRepository = IGenreRepository;
     }
 
     @GetMapping
     public ResponseEntity<?> getAll(Pageable pageable){
 
-        Page<Genre> genres = this.genreRepository.findAll(pageable);
+        Page<Genre> genres = this.IGenreRepository.findAll(pageable);
         return new ResponseEntity<>(genres, HttpStatus.OK);
 
     }
@@ -41,7 +39,7 @@ public class GenreController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> createGenre(@Valid @RequestBody Genre genre){
 
-        this.genreRepository.save(genre);
+        this.IGenreRepository.save(genre);
         return new ResponseEntity<>(genre, HttpStatus.CREATED);
 
     }
@@ -58,9 +56,9 @@ public class GenreController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> deleteGenre(@RequestBody Long id){
 
-        boolean genreExists = this.genreRepository.existsById(id);
+        boolean genreExists = this.IGenreRepository.existsById(id);
         if(genreExists){
-            this.genreRepository.deleteById(id);
+            this.IGenreRepository.deleteById(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } else {
             return null;

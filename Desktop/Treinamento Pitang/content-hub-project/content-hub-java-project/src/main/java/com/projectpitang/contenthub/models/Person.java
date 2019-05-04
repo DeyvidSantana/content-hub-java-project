@@ -33,17 +33,17 @@ public class Person implements IObjectPersistent<Long> {
     private Double height;
 
     @Size(min = 1, max = 100)
-    @Column(name = "per_cl_citybirth")
-    private String cityBirth;
+    @Column(name = "per_cl_hometown")
+    private String hometown;
 
     @Size(min = 1, max = 100)
-    @Column(name = "per_cl_countrybirth")
-    private String countryBirth;
+    @Column(name = "per_cl_homeCountry")
+    private String homeCountry;
 
     @Column(name = "per_cl_genre")
     private PersonGender gender;
 
-    @ManyToMany(mappedBy = "cast")
+    @ManyToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.REFRESH}, mappedBy = "cast")
     private Set<Cast> cast;
 
     @Column(name = "per_cl_type", insertable=false, updatable=false)
@@ -94,20 +94,20 @@ public class Person implements IObjectPersistent<Long> {
         this.height = height;
     }
 
-    public String getCityBirth() {
-        return cityBirth;
+    public String getHometown() {
+        return hometown;
     }
 
-    public void setCityBirth(String cityBirth) {
-        this.cityBirth = cityBirth;
+    public void setHometown(String hometown) {
+        this.hometown = hometown;
     }
 
-    public String getCountryBirth() {
-        return countryBirth;
+    public String getHomeCountry() {
+        return homeCountry;
     }
 
-    public void setCountryBirth(String countryBirth) {
-        this.countryBirth = countryBirth;
+    public void setHomeCountry(String homeCountry) {
+        this.homeCountry = homeCountry;
     }
 
     public PersonGender getGender() {
