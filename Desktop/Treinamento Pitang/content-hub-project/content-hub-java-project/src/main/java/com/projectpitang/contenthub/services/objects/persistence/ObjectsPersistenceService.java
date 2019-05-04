@@ -13,9 +13,6 @@ import java.util.*;
 public class ObjectsPersistenceService {
 
     @Autowired
-    private ProgramRepository programRepository;
-
-    @Autowired
     private IMovieRepository iMovieRepository;
 
     @Autowired
@@ -66,7 +63,6 @@ public class ObjectsPersistenceService {
 
             movie.setCast(castMovie);
 
-            //programRepository.save(movie);
             iMovieRepository.save(movie);
 
         }
@@ -110,7 +106,6 @@ public class ObjectsPersistenceService {
 
             tv.setCast(castTv);
 
-            //programRepository.save(tv);
             iTvRepository.save(tv);
 
         }

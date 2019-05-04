@@ -23,7 +23,7 @@ public class ContentHubApplication implements CommandLineRunner {
 	@Override
 	public void run(String...args) throws Exception{
 
-		this.apiConsumptionService.persistObjects();
+		//this.apiConsumptionService.persistObjects();
 
 	}
 

@@ -4,8 +4,7 @@ import com.projectpitang.contenthub.dto.MovieDTO;
 import com.projectpitang.contenthub.dto.TvDTO;
 import com.projectpitang.contenthub.models.Movie;
 import com.projectpitang.contenthub.models.TV;
-import com.projectpitang.contenthub.services.MovieService;
-import com.projectpitang.contenthub.services.TvService;
+import com.projectpitang.contenthub.services.ProgramService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,31 +20,20 @@ import org.springframework.web.bind.annotation.*;
 public class ProgramController {
 
     @Autowired
-    private MovieService movieService;
+    private ProgramService programService;
 
-    @Autowired
-    private TvService tvService;
-
-    public MovieService getMovieService() {
-        return movieService;
+    public ProgramService getProgramService() {
+        return programService;
     }
 
-    public void setMovieService(MovieService movieService) {
-        this.movieService = movieService;
-    }
-
-    public TvService getTvService() {
-        return tvService;
-    }
-
-    public void setTvService(TvService tvService) {
-        this.tvService = tvService;
+    public void setProgramService(ProgramService programService) {
+        this.programService = programService;
     }
 
     @GetMapping("/movies")
     public ResponseEntity<?> getAllMovies(Pageable pageable){
 
-        Page<Movie> movies = this.movieService.getAll(pageable);
+        Page<Movie> movies = this.programService.getAllMovies(pageable);
         return new ResponseEntity<>(movies, HttpStatus.OK);
 
     }
@@ -53,7 +41,7 @@ public class ProgramController {
     @GetMapping("/tvs")
     public ResponseEntity<?> getAllTvs(Pageable pageable){
 
-        Page<TV> tvs = this.tvService.getAll(pageable);
+        Page<TV> tvs = this.programService.getAllTvs(pageable);
         return new ResponseEntity<>(tvs, HttpStatus.OK);
 
     }
@@ -61,7 +49,7 @@ public class ProgramController {
     @GetMapping("/movies/title/{title}")
     public ResponseEntity<?> findMovieByTitle(Pageable pageable, @PathVariable String title){
 
-        Page<Movie> movies = this.movieService.findMovieByTitle(pageable, title);
+        Page<Movie> movies = this.programService.findMovieByTitle(pageable, title);
 
         if(movies != null){
             return new ResponseEntity<>(movies, HttpStatus.OK);
@@ -74,7 +62,7 @@ public class ProgramController {
     @GetMapping("/tvs/title/{title}")
     public ResponseEntity<?> findTvByTitle(Pageable pageable, @PathVariable String title){
 
-        Page<TV> tvs = this.tvService.findTvByTitle(pageable, title);
+        Page<TV> tvs = this.programService.findTvByTitle(pageable, title);
 
         if(tvs != null){
             return new ResponseEntity<>(tvs, HttpStatus.OK);
@@ -87,7 +75,7 @@ public class ProgramController {
     @GetMapping("/movies/language/{language}")
     public ResponseEntity<?> findMovieByLanguage(Pageable pageable, @PathVariable String language){
 
-        Page<Movie> movies = this.movieService.findMovieByLanguage(pageable, language);
+        Page<Movie> movies = this.programService.findMovieByLanguage(pageable, language);
 
         if(movies != null){
             return new ResponseEntity<>(movies, HttpStatus.OK);
@@ -100,7 +88,7 @@ public class ProgramController {
     @GetMapping("/tvs/language/{language}")
     public ResponseEntity<?> findTvByLanguage(Pageable pageable, @PathVariable String language){
 
-        Page<TV> tvs = this.tvService.findTvByLanguage(pageable, language);
+        Page<TV> tvs = this.programService.findTvByLanguage(pageable, language);
 
         if(tvs != null){
             return new ResponseEntity<>(tvs, HttpStatus.OK);
@@ -113,7 +101,7 @@ public class ProgramController {
     @GetMapping("/movies/date/{date}")
     public ResponseEntity<?> findMovieByDate(Pageable pageable, @PathVariable String date){
 
-        Page<Movie> movies = this.movieService.findMovieByDate(pageable, date);
+        Page<Movie> movies = this.programService.findMovieByDate(pageable, date);
 
         if(movies != null){
             return new ResponseEntity<>(movies, HttpStatus.OK);
@@ -126,7 +114,7 @@ public class ProgramController {
     @GetMapping("/tvs/date/{date}")
     public ResponseEntity<?> findTvByDate(Pageable pageable, @PathVariable String date){
 
-        Page<TV> tvs = this.tvService.findTvByDate(pageable, date);
+        Page<TV> tvs = this.programService.findTvByDate(pageable, date);
 
         if(tvs != null){
             return new ResponseEntity<>(tvs, HttpStatus.OK);
@@ -141,7 +129,7 @@ public class ProgramController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> updateMovie(@RequestParam Long id, @RequestBody MovieDTO movieDTO){
 
-        Movie movieUpdated = this.movieService.updateMovie(id, movieDTO.transformToMovie());
+        Movie movieUpdated = this.programService.updateMovie(id, movieDTO.transformToMovie());
 
         if(movieUpdated != null){
             return new ResponseEntity<>(movieUpdated, HttpStatus.OK);
@@ -155,7 +143,7 @@ public class ProgramController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> updateTv(@RequestParam Long id, @RequestBody TvDTO tvDTO){
 
-        TV tvUpdated = this.tvService.updateTv(id, tvDTO.transformToTv());
+        TV tvUpdated = this.programService.updateTv(id, tvDTO.transformToTv());
 
         if(tvUpdated != null){
             return new ResponseEntity<>(tvUpdated, HttpStatus.OK);
@@ -169,7 +157,7 @@ public class ProgramController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> deleteMovie(@RequestBody Long id){
 
-        boolean movieExists = this.movieService.deleteMovie(id);
+        boolean movieExists = this.programService.deleteMovie(id);
         if(movieExists){
             return new ResponseEntity<>(id, HttpStatus.OK);
         } else {
@@ -182,7 +170,7 @@ public class ProgramController {
     @Transactional(rollbackFor = Exception.class)
     public ResponseEntity<?> deleteTv(@RequestBody Long id){
 
-        boolean tvExists = this.tvService.deleteTv(id);
+        boolean tvExists = this.programService.deleteTv(id);
         if(tvExists){
             return new ResponseEntity<>(id, HttpStatus.OK);
         } else {
