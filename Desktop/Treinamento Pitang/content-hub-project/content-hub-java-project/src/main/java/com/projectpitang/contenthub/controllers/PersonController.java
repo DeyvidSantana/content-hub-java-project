@@ -1,6 +1,7 @@
 package com.projectpitang.contenthub.controllers;
 
 import com.projectpitang.contenthub.dto.PersonDTO;
+import com.projectpitang.contenthub.error.ResourceNotFoundException;
 import com.projectpitang.contenthub.models.Person;
 import com.projectpitang.contenthub.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,19 @@ public class PersonController {
 
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getMovieById(@PathVariable Long id){
+
+        Person person = this.personService.getPersonById(id);
+
+        if(person != null){
+            return new ResponseEntity<>(person.transformToPersonDTO(), HttpStatus.OK);
+        }
+
+        throw new ResourceNotFoundException("There is no person with this id!");
+
+    }
+
     @GetMapping("name/{name}")
     public ResponseEntity<?> findPersonByName(Pageable pageable, @PathVariable String name){
 
@@ -56,9 +70,9 @@ public class PersonController {
 
         if(personUpdated != null){
             return new ResponseEntity<>(personUpdated, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        throw new ResourceNotFoundException("There is no person with this id to be updated!");
 
     }
 
@@ -67,11 +81,12 @@ public class PersonController {
     public ResponseEntity<?> deletePerson(@RequestBody Long id){
 
         boolean personExists = this.personService.deletePerson(id);
+
         if(personExists){
             return new ResponseEntity<>(id, HttpStatus.OK);
-        } else {
-            return null;
         }
+
+        throw new ResourceNotFoundException("There is no person with this id to be deleted!");
 
     }
 }

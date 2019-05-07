@@ -36,10 +36,14 @@ public class ProgramService {
         this.iTvRepository = iTvRepository;
     }
 
-    // Methods related to film.
+    // Methods related to movies.
 
     public Page<Movie> getAllMovies(Pageable pageable){
         return this.iMovieRepository.findAll(pageable);
+    }
+
+    public Movie getMovieById(Long id){
+        return this.iMovieRepository.findById(id).get();
     }
 
     public Page<Movie> findMovieByTitle(Pageable pageable, String title){
@@ -113,10 +117,14 @@ public class ProgramService {
 
     }
 
-    // Methods related to tv.
+    // Methods related to tvs.
 
     public Page<TV> getAllTvs(Pageable pageable){
         return this.iTvRepository.findAll(pageable);
+    }
+
+    public TV getTvById(Long id){
+        return this.iTvRepository.findById(id).get();
     }
 
     public Page<TV> findTvByTitle(Pageable pageable, String title){

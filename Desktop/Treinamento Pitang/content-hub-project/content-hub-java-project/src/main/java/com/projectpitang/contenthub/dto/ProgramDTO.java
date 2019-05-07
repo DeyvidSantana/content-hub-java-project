@@ -8,6 +8,7 @@ public abstract class ProgramDTO {
     private String language;
     private String releaseYear;
     private int runtime;
+    private String backdropPath;
 
     public String getTitle() {
         return title;
@@ -55,5 +56,13 @@ public abstract class ProgramDTO {
 
     public void setRuntime(int runtime) {
         this.runtime = runtime;
+    }
+
+    public String getBackdropPath() {
+        return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 }

@@ -19,6 +19,8 @@ public class Movie extends Program{
         movieDTO.setLanguage(this.getLanguage());
         movieDTO.setReleaseYear(this.getReleaseYear());
         movieDTO.setRuntime(this.getRuntime());
+        movieDTO.setBackdropPath(this.getBackdropPath());
+
         return movieDTO;
     }
     

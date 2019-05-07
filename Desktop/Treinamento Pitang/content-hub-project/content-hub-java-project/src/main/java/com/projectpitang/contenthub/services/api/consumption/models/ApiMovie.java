@@ -3,7 +3,6 @@ package com.projectpitang.contenthub.services.api.consumption.models;
 public class ApiMovie extends ApiProgram {
 
     private String title;
-    private String poster_path;
     private String original_language;
     private String release_date;
 
@@ -13,14 +12,6 @@ public class ApiMovie extends ApiProgram {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-   public String getPoster_path() {
-        return poster_path;
-    }
-
-    public void setPoster_path(String poster_path) {
-        this.poster_path = poster_path;
     }
 
     public String getOriginal_language() {

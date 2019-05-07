@@ -27,6 +27,10 @@ public class PersonService {
         return this.iPersonRepository.findAll(pageable);
     }
 
+    public Person getPersonById(Long id){
+        return this.iPersonRepository.findById(id).get();
+    }
+
     public Page<Person> findPersonByName(Pageable pageable, String name){
 
         Page<Person> people = this.iPersonRepository.findByNameContainingIgnoreCase(pageable, name);

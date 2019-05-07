@@ -6,7 +6,6 @@ import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
-import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -50,7 +49,7 @@ public class Program implements IObjectPersistent<Long> {
     private int runtime;
 
     @Column(name = "prog_cl_posterpath")
-    private String posterPath;
+    private String backdropPath;
 
     @ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Genre.class)
     @JoinTable(name = "tb_program_genre",
@@ -143,12 +142,12 @@ public class Program implements IObjectPersistent<Long> {
         this.runtime = runtime;
     }
 
-    public String getPosterPath() {
-        return posterPath;
+    public String getBackdropPath() {
+        return backdropPath;
     }
 
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 
     public List<Genre> getGenres() {

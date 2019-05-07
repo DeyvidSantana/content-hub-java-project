@@ -1,6 +1,7 @@
 package com.projectpitang.contenthub.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.base.Objects;
 import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
@@ -32,6 +33,8 @@ public class Cast implements IObjectPersistent<Long> {
     @JoinTable(name = "tb_cast_person",
                 joinColumns = @JoinColumn(referencedColumnName = "cast_cl_id"),
                 inverseJoinColumns = {@JoinColumn(referencedColumnName = "per_cl_id")})
+    /*@JsonManagedReference
+    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, mappedBy = "cast")*/
     private List<Person> cast;
 
     @Override

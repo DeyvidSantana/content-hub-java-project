@@ -5,6 +5,7 @@ public abstract class ApiProgram {
     private Long id;
     private int[] genre_ids;
     private String overview;
+    private String backdrop_path;
 
     public Long getId() {
         return id;
@@ -28,5 +29,13 @@ public abstract class ApiProgram {
 
     public void setOverview(String overview) {
         this.overview = overview;
+    }
+
+    public String getBackdrop_path() {
+        return backdrop_path;
+    }
+
+    public void setBackdrop_path(String backdrop_path) {
+        this.backdrop_path = backdrop_path;
     }
 }

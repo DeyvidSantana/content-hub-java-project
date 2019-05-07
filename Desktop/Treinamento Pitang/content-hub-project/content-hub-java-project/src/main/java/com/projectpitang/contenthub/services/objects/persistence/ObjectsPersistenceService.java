@@ -38,7 +38,7 @@ public class ObjectsPersistenceService {
             movie.setOverview(apiMovie.getOverview());
             movie.setLanguage(apiMovie.getOriginal_language());
             movie.setReleaseYear(apiMovie.getRelease_date());
-            movie.setPosterPath(apiMovie.getPoster_path());
+            movie.setBackdropPath(apiMovie.getBackdrop_path());
 
             // Used to pick up the original country information and movie runtime.
             ApiMoreDetailsMovieTv apiMoreDetailsMovieTv = apiConsumptionService.getMoreDetailsMovie(apiMovie.getId());
@@ -82,7 +82,7 @@ public class ObjectsPersistenceService {
             tv.setOverview(apiTv.getOverview());
             tv.setLanguage(apiTv.getOriginal_language());
             tv.setReleaseYear(apiTv.getFirst_air_date());
-            tv.setPosterPath(apiTv.getPoster_path());
+            tv.setBackdropPath(apiTv.getBackdrop_path());
             tv.setOriginCountry(apiTv.getOrigin_country().size() != 0 ? apiTv.getOrigin_country().get(0) : null);
             List<Genre> genres = this.getGenresFromMovieTvGenresList(apiTv);
             tv.setGenres(genres);
@@ -223,6 +223,7 @@ public class ObjectsPersistenceService {
         completedPerson.setHometown(apiPerson.getPlace_of_birth());
         completedPerson.setHomeCountry(apiPerson.getPlace_of_birth());
         completedPerson.setHeight(1.7);
+        completedPerson.setProfilePath(apiPerson.getProfile_path());
 
         Person savedPerson = iPersonRepository.save(completedPerson);
 

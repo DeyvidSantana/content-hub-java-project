@@ -39,11 +39,37 @@ public class ProgramController {
 
     }
 
+    @GetMapping("/movies/{id}")
+    public ResponseEntity<?> getMovieById(@PathVariable Long id){
+
+        Movie movie = this.programService.getMovieById(id);
+
+        if(movie != null){
+            return new ResponseEntity<>(movie.transformToMovieDTO(), HttpStatus.OK);
+        }
+
+        throw new ResourceNotFoundException("There is no movie with this id!");
+
+    }
+
     @GetMapping("/tvs")
     public ResponseEntity<?> getAllTvs(Pageable pageable){
 
         Page<TV> tvs = this.programService.getAllTvs(pageable);
         return new ResponseEntity<>(tvs, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/tvs/{id}")
+    public ResponseEntity<?> getTvById(@PathVariable Long id){
+
+        TV tv = this.programService.getTvById(id);
+
+        if(tv != null){
+            return new ResponseEntity<>(tv.transformToTvDTO(), HttpStatus.OK);
+        }
+
+        throw new ResourceNotFoundException("There is no movie with this id!");
 
     }
 
