@@ -37,7 +37,7 @@ public class ObjectsPersistenceService {
             movie.setTitle(apiMovie.getTitle());
             movie.setOverview(apiMovie.getOverview());
             movie.setLanguage(apiMovie.getOriginal_language());
-            movie.setReleaseYear(apiMovie.getRelease_date());
+            movie.setReleaseDate(apiMovie.getRelease_date());
             movie.setBackdropPath(apiMovie.getBackdrop_path());
 
             // Used to pick up the original country information and movie runtime.
@@ -81,7 +81,7 @@ public class ObjectsPersistenceService {
             tv.setTitle(apiTv.getOriginal_name());
             tv.setOverview(apiTv.getOverview());
             tv.setLanguage(apiTv.getOriginal_language());
-            tv.setReleaseYear(apiTv.getFirst_air_date());
+            tv.setReleaseDate(apiTv.getFirst_air_date());
             tv.setBackdropPath(apiTv.getBackdrop_path());
             tv.setOriginCountry(apiTv.getOrigin_country().size() != 0 ? apiTv.getOrigin_country().get(0) : null);
             List<Genre> genres = this.getGenresFromMovieTvGenresList(apiTv);
@@ -188,7 +188,7 @@ public class ObjectsPersistenceService {
                     people.add(completedPerson);
                     index++;
                 } else if(person.getJob().contains("Producer")){
-                    completedPerson = this.getCompletePerson(person,"AU");
+                    completedPerson = this.getCompletePerson(person,"PR");
                     people.add(completedPerson);
                     index++;
                 }
@@ -212,8 +212,8 @@ public class ObjectsPersistenceService {
             case "DI":
                 completedPerson = new Director();
                 break;
-            case "AU":
-                completedPerson = new Author();
+            case "PR":
+                completedPerson = new Producer();
                 break;
         }
 
@@ -261,8 +261,8 @@ public class ObjectsPersistenceService {
                 case "DI":
                     completedPerson = new Director();
                     break;
-                case "AU":
-                    completedPerson = new Author();
+                case "PR":
+                    completedPerson = new Producer();
                     break;
             }
 

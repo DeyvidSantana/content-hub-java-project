@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+
 
 @RestController
 @RequestMapping("/program")
@@ -154,7 +156,7 @@ public class ProgramController {
 
     @PutMapping("update/movie")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> updateMovie(@RequestParam Long id, @RequestBody MovieDTO movieDTO){
+    public ResponseEntity<?> updateMovie(@RequestParam Long id, @RequestBody MovieDTO movieDTO) throws ParseException {
 
         Movie movieUpdated = this.programService.updateMovie(id, movieDTO.transformToMovie());
 
@@ -168,7 +170,7 @@ public class ProgramController {
 
     @PutMapping("update/tv")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> updateTv(@RequestParam Long id, @RequestBody TvDTO tvDTO){
+    public ResponseEntity<?> updateTv(@RequestParam Long id, @RequestBody TvDTO tvDTO) throws ParseException {
 
         TV tvUpdated = this.programService.updateTv(id, tvDTO.transformToTv());
 

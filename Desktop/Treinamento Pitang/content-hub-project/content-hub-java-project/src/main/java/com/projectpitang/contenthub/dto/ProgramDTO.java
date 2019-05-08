@@ -8,7 +8,7 @@ public abstract class ProgramDTO {
     private String overview;
     private String originCountry;
     private String language;
-    private String releaseYear;
+    private String releaseDate;
     private int runtime;
     private String backdropPath;
     private List<String> genres;
@@ -46,12 +46,12 @@ public abstract class ProgramDTO {
         this.language = language;
     }
 
-    public String getReleaseYear() {
-        return releaseYear;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setReleaseYear(String releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public int getRuntime() {

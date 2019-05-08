@@ -72,7 +72,7 @@ public class ProgramService {
 
     public Page<Movie> findMovieByDate(Pageable pageable, String date){
 
-        Page<Movie> movies = this.iMovieRepository.findByReleaseYearLike(pageable, date);
+        Page<Movie> movies = this.iMovieRepository.findByReleaseDateContainingIgnoreCase(pageable, date);
 
         if(movies != null){
             return movies;
@@ -93,7 +93,7 @@ public class ProgramService {
             movieToBeUpdated.get().setOverview(movie.getOverview());
             movieToBeUpdated.get().setOriginCountry(movie.getOriginCountry());
             movieToBeUpdated.get().setLanguage(movie.getLanguage());
-            movieToBeUpdated.get().setReleaseYear(movie.getReleaseYear());
+            movieToBeUpdated.get().setReleaseDate(movie.getReleaseDate());
             movieToBeUpdated.get().setRuntime(movie.getRuntime());
 
             this.iMovieRepository.save(movieToBeUpdated.get());
@@ -153,7 +153,7 @@ public class ProgramService {
 
     public Page<TV> findTvByDate(Pageable pageable, String date){
 
-        Page<TV> tvs = this.iTvRepository.findByReleaseYearLike(pageable, date);
+        Page<TV> tvs = this.iTvRepository.findByReleaseDateContainingIgnoreCase(pageable, date);
 
         if(tvs != null){
             return tvs;
@@ -174,7 +174,7 @@ public class ProgramService {
             tvToBeUpdated.get().setOverview(tv.getOverview());
             tvToBeUpdated.get().setOriginCountry(tv.getOriginCountry());
             tvToBeUpdated.get().setLanguage(tv.getLanguage());
-            tvToBeUpdated.get().setReleaseYear(tv.getReleaseYear());
+            tvToBeUpdated.get().setReleaseDate(tv.getReleaseDate());
             tvToBeUpdated.get().setRuntime(tv.getRuntime());
 
             this.iTvRepository.save(tvToBeUpdated.get());

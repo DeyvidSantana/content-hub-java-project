@@ -31,7 +31,7 @@ public class TV extends Program{
         tvDTO.setOverview(this.getOverview());
         tvDTO.setOriginCountry(this.getOriginCountry());
         tvDTO.setLanguage(this.getLanguage());
-        tvDTO.setReleaseYear(this.getReleaseYear());
+        tvDTO.setReleaseDate(this.getReleaseDate());
         tvDTO.setRuntime(this.getRuntime());
         tvDTO.setSeansons(this.seansons);
         tvDTO.setBackdropPath(this.getBackdropPath());
@@ -44,7 +44,7 @@ public class TV extends Program{
 
         List<String> castDTO = new ArrayList<>();
         for (Person person: this.getCast().getCast()) {
-            castDTO.add(person.getName());
+            castDTO.add(person.getProfilePath());
         }
         tvDTO.setCast(castDTO);
 

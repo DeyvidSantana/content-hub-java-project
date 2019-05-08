@@ -39,9 +39,8 @@ public class Program implements IObjectPersistent<Long> {
     @Column(name = "prog_cl_language")
     private String language;
 
-    //@Temporal(TemporalType.DATE)
-    @Column(name = "prog_cl_releaseyear")
-    private String releaseYear;
+    @Column(name = "prog_cl_releaseDate")
+    private String releaseDate;
 
     @Column(name = "prog_cl_runtime")
     private int runtime;
@@ -124,12 +123,12 @@ public class Program implements IObjectPersistent<Long> {
         this.language = language;
     }
 
-    public String getReleaseYear() {
-        return releaseYear;
+    public String getReleaseDate() {
+        return releaseDate;
     }
 
-    public void setReleaseYear(String releaseYear) {
-        this.releaseYear = releaseYear;
+    public void setReleaseDate(String releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     public int getRuntime() {

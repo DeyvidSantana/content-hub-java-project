@@ -19,7 +19,7 @@ public class Movie extends Program{
         movieDTO.setOverview(this.getOverview());
         movieDTO.setOriginCountry(this.getOriginCountry());
         movieDTO.setLanguage(this.getLanguage());
-        movieDTO.setReleaseYear(this.getReleaseYear());
+        movieDTO.setReleaseDate(this.getReleaseDate());
         movieDTO.setRuntime(this.getRuntime());
         movieDTO.setBackdropPath(this.getBackdropPath());
 
@@ -31,7 +31,7 @@ public class Movie extends Program{
 
         List<String> castDTO = new ArrayList<>();
         for (Person person: this.getCast().getCast()) {
-            castDTO.add(person.getName());
+            castDTO.add(person.getProfilePath());
         }
         movieDTO.setCast(castDTO);
 

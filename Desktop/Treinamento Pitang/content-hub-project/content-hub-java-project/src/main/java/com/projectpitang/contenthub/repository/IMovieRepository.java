@@ -16,7 +16,7 @@ public interface IMovieRepository extends JpaRepository<Movie,Long> {
 
     public abstract Page<Movie> findByLanguageLike(Pageable pageable, String language);
 
-    public abstract Page<Movie> findByReleaseYearLike(Pageable pageable, String releaseYear);
+    public abstract Page<Movie> findByReleaseDateContainingIgnoreCase(Pageable pageable, String releaseYear);
 
     public abstract Optional<Movie> findById(Long id);
 

@@ -10,7 +10,7 @@ public class MovieDTO extends ProgramDTO {
         movie.setOverview(this.getOverview());
         movie.setOriginCountry(this.getOriginCountry());
         movie.setLanguage(this.getLanguage());
-        movie.setReleaseYear(this.getReleaseYear());
+        movie.setReleaseDate(this.getReleaseDate());
         movie.setRuntime(this.getRuntime());
         movie.setBackdropPath(this.getBackdropPath());
 

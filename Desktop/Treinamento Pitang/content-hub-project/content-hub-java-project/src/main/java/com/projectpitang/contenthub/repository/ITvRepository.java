@@ -16,7 +16,7 @@ public interface ITvRepository extends JpaRepository<TV,Long> {
 
     public abstract Page<TV> findByLanguageLike(Pageable pageable, String language);
 
-    public abstract Page<TV> findByReleaseYearLike(Pageable pageable, String releaseYear);
+    public abstract Page<TV> findByReleaseDateContainingIgnoreCase(Pageable pageable, String releaseYear);
 
     public abstract Optional<TV> findById(Long id);
 

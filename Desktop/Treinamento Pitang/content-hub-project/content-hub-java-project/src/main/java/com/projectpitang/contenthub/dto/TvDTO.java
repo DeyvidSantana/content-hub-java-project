@@ -20,7 +20,7 @@ public class TvDTO extends ProgramDTO {
         tv.setOverview(this.getOverview());
         tv.setOriginCountry(this.getOriginCountry());
         tv.setLanguage(this.getLanguage());
-        tv.setReleaseYear(this.getReleaseYear());
+        tv.setReleaseDate(this.getReleaseDate());
         tv.setRuntime(this.getRuntime());
         tv.setSeansons(this.seansons);
 
