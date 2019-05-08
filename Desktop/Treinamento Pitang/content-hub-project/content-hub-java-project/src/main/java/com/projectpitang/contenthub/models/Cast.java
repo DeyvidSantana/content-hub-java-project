@@ -11,7 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "tb_cast")
-@JsonIgnoreProperties({"program","cast"})
+@JsonIgnoreProperties({"program"})
 public class Cast implements IObjectPersistent<Long> {
 
     @Id

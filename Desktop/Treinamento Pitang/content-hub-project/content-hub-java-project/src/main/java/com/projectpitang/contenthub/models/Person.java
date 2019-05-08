@@ -159,7 +159,7 @@ public class Person implements IObjectPersistent<Long> {
         personDTO.setHometown(this.getHometown());
         personDTO.setHomeCountry(this.getHomeCountry());
         personDTO.setGender(this.getGender());
-
+        personDTO.setProfilePath(this.profilePath);
         return personDTO;
     }
 }

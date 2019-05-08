@@ -10,6 +10,7 @@ public class PersonDTO {
     private String hometown;
     private String homeCountry;
     private PersonGender gender;
+    private String profilePath;
 
     public String getName() {
         return name;
@@ -49,6 +50,14 @@ public class PersonDTO {
 
     public void setGender(PersonGender gender) {
         this.gender = gender;
+    }
+
+    public String getProfilePath() {
+        return profilePath;
+    }
+
+    public void setProfilePath(String profilePath) {
+        this.profilePath = profilePath;
     }
 
     public Person transformToPerson(){

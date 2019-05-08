@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_tv")
@@ -32,6 +34,20 @@ public class TV extends Program{
         tvDTO.setReleaseYear(this.getReleaseYear());
         tvDTO.setRuntime(this.getRuntime());
         tvDTO.setSeansons(this.seansons);
+        tvDTO.setBackdropPath(this.getBackdropPath());
+
+        List<String> genreDTO = new ArrayList<>();
+        for (Genre genre : this.getGenres()) {
+            genreDTO.add(genre.getName());
+        }
+        tvDTO.setGenres(genreDTO);
+
+        List<String> castDTO = new ArrayList<>();
+        for (Person person: this.getCast().getCast()) {
+            castDTO.add(person.getName());
+        }
+        tvDTO.setCast(castDTO);
+
         return tvDTO;
     }
 }

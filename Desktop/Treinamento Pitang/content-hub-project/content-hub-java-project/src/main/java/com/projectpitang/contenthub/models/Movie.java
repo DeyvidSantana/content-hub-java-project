@@ -5,6 +5,8 @@ import com.projectpitang.contenthub.dto.MovieDTO;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "tb_movie")
@@ -20,6 +22,18 @@ public class Movie extends Program{
         movieDTO.setReleaseYear(this.getReleaseYear());
         movieDTO.setRuntime(this.getRuntime());
         movieDTO.setBackdropPath(this.getBackdropPath());
+
+        List<String> genreDTO = new ArrayList<>();
+        for (Genre genre : this.getGenres()) {
+            genreDTO.add(genre.getName());
+        }
+        movieDTO.setGenres(genreDTO);
+
+        List<String> castDTO = new ArrayList<>();
+        for (Person person: this.getCast().getCast()) {
+            castDTO.add(person.getName());
+        }
+        movieDTO.setCast(castDTO);
 
         return movieDTO;
     }

@@ -1,5 +1,7 @@
 package com.projectpitang.contenthub.dto;
 
+import java.util.List;
+
 public abstract class ProgramDTO {
 
     private String title;
@@ -9,6 +11,8 @@ public abstract class ProgramDTO {
     private String releaseYear;
     private int runtime;
     private String backdropPath;
+    private List<String> genres;
+    private List<String> cast;
 
     public String getTitle() {
         return title;
@@ -64,5 +68,21 @@ public abstract class ProgramDTO {
 
     public void setBackdropPath(String backdropPath) {
         this.backdropPath = backdropPath;
+    }
+
+    public List<String> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(List<String> genres) {
+        this.genres = genres;
+    }
+
+    public List<String> getCast() {
+        return cast;
+    }
+
+    public void setCast(List<String> cast) {
+        this.cast = cast;
     }
 }
