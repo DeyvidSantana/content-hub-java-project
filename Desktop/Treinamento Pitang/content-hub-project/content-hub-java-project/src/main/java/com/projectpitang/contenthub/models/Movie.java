@@ -15,6 +15,7 @@ public class Movie extends Program{
 
     public MovieDTO transformToMovieDTO(){
         MovieDTO movieDTO = new MovieDTO();
+        movieDTO.setId(this.getId());
         movieDTO.setTitle(this.getTitle());
         movieDTO.setOverview(this.getOverview());
         movieDTO.setOriginCountry(this.getOriginCountry());

@@ -4,6 +4,7 @@ import java.util.List;
 
 public abstract class ProgramDTO {
 
+    private Long id;
     private String title;
     private String overview;
     private String originCountry;
@@ -13,6 +14,14 @@ public abstract class ProgramDTO {
     private String backdropPath;
     private List<String> genres;
     private List<String> cast;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

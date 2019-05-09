@@ -27,6 +27,7 @@ public class TV extends Program{
 
     public TvDTO transformToTvDTO(){
         TvDTO tvDTO = new TvDTO();
+        tvDTO.setId(this.getId());
         tvDTO.setTitle(this.getTitle());
         tvDTO.setOverview(this.getOverview());
         tvDTO.setOriginCountry(this.getOriginCountry());
