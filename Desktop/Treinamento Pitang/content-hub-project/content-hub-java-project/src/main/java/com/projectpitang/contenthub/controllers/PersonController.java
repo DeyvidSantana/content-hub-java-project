@@ -62,9 +62,9 @@ public class PersonController {
     }
 
 
-    @PutMapping
+    @PutMapping("/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> updatePerson(@RequestParam Long id, @RequestBody PersonDTO personDTO){
+    public ResponseEntity<?> updatePerson(@PathVariable Long id, @RequestBody PersonDTO personDTO){
 
         Person personUpdated = this.personService.updatePerson(id,personDTO.transformToPerson());
 

@@ -5,12 +5,21 @@ import com.projectpitang.contenthub.utils.PersonGender;
 
 public class PersonDTO {
 
+    private Long id;
     private String name;
     private Double height;
     private String hometown;
     private String homeCountry;
     private PersonGender gender;
     private String profilePath;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

@@ -154,6 +154,7 @@ public class Person implements IObjectPersistent<Long> {
 
     public PersonDTO transformToPersonDTO(){
         PersonDTO personDTO = new PersonDTO();
+        personDTO.setId(this.getId());
         personDTO.setName(this.getName());
         personDTO.setHeight(this.getHeight());
         personDTO.setHometown(this.getHometown());

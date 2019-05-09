@@ -154,9 +154,9 @@ public class ProgramController {
     }
 
 
-    @PutMapping("update/movie")
+    @PutMapping("update/movie/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> updateMovie(@RequestParam Long id, @RequestBody MovieDTO movieDTO) throws ParseException {
+    public ResponseEntity<?> updateMovie(@PathVariable Long id, @RequestBody MovieDTO movieDTO){
 
         Movie movieUpdated = this.programService.updateMovie(id, movieDTO.transformToMovie());
 
@@ -168,9 +168,9 @@ public class ProgramController {
 
     }
 
-    @PutMapping("update/tv")
+    @PutMapping("update/tv/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> updateTv(@RequestParam Long id, @RequestBody TvDTO tvDTO) throws ParseException {
+    public ResponseEntity<?> updateTv(@PathVariable Long id, @RequestBody TvDTO tvDTO){
 
         TV tvUpdated = this.programService.updateTv(id, tvDTO.transformToTv());
 
