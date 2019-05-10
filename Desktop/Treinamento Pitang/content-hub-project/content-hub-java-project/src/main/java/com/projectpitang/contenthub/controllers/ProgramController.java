@@ -14,9 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-
-
 @RestController
 @RequestMapping("/program")
 @CrossOrigin("http://localhost:4200")
@@ -182,9 +179,9 @@ public class ProgramController {
 
     }
 
-    @DeleteMapping("delete/movie")
+    @DeleteMapping("delete/movie/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> deleteMovie(@RequestBody Long id){
+    public ResponseEntity<?> deleteMovie(@PathVariable Long id){
 
         boolean movieDeleted = this.programService.deleteMovie(id);
 
@@ -196,9 +193,9 @@ public class ProgramController {
 
     }
 
-    @DeleteMapping("delete/tv")
+    @DeleteMapping("delete/tv/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> deleteTv(@RequestBody Long id){
+    public ResponseEntity<?> deleteTv(@PathVariable Long id){
 
         boolean tvDeleted = this.programService.deleteTv(id);
 

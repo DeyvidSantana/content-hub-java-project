@@ -48,6 +48,8 @@ public class Program implements IObjectPersistent<Long> {
     @Column(name = "prog_cl_posterpath")
     private String backdropPath;
 
+    /* The cascade types for this relationship should be just persist and merge.
+       The refresh type is being used only to persist data, but is not recommended.*/
     @ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Genre.class)
     @JoinTable(name = "tb_program_genre",
             joinColumns = @JoinColumn(referencedColumnName = "prog_cl_id"),

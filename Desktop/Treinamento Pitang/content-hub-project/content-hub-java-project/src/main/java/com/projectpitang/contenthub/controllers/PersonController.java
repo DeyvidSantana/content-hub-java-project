@@ -76,9 +76,9 @@ public class PersonController {
 
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @Transactional(rollbackFor = Exception.class)
-    public ResponseEntity<?> deletePerson(@RequestBody Long id){
+    public ResponseEntity<?> deletePerson(@PathVariable Long id){
 
         boolean personExists = this.personService.deletePerson(id);
 

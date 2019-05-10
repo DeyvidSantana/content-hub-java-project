@@ -1,7 +1,6 @@
 package com.projectpitang.contenthub.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.google.common.base.Objects;
 import com.projectpitang.contenthub.infrastructure.IObjectPersistent;
 
@@ -29,12 +28,12 @@ public class Cast implements IObjectPersistent<Long> {
     @OneToOne(cascade = CascadeType.ALL, mappedBy="cast")
     private Program program;
 
+    /* The cascade types for this relationship should be just persist and merge.
+       The refresh type is being used only to persist data, but is not recommended.*/
     @ManyToMany(cascade = CascadeType.REFRESH, targetEntity = Person.class)
     @JoinTable(name = "tb_cast_person",
                 joinColumns = @JoinColumn(referencedColumnName = "cast_cl_id"),
                 inverseJoinColumns = {@JoinColumn(referencedColumnName = "per_cl_id")})
-    /*@JsonManagedReference
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, mappedBy = "cast")*/
     private List<Person> cast;
 
     @Override

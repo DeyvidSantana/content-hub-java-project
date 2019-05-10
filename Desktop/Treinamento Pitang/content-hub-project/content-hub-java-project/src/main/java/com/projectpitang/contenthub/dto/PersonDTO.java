@@ -11,6 +11,7 @@ public class PersonDTO {
     private String hometown;
     private String homeCountry;
     private PersonGender gender;
+    private String job;
     private String profilePath;
 
     public Long getId() {
@@ -59,6 +60,14 @@ public class PersonDTO {
 
     public void setGender(PersonGender gender) {
         this.gender = gender;
+    }
+
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
     }
 
     public String getProfilePath() {

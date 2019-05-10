@@ -37,7 +37,7 @@ public class ObjectsPersistenceService {
             movie.setTitle(apiMovie.getTitle());
             movie.setOverview(apiMovie.getOverview());
             movie.setLanguage(apiMovie.getOriginal_language());
-            movie.setReleaseDate(apiMovie.getRelease_date());
+            movie.setReleaseDate(apiMovie.getRelease_date().substring(0,4));
             movie.setBackdropPath(apiMovie.getBackdrop_path());
 
             // Used to pick up the original country information and movie runtime.
@@ -81,7 +81,7 @@ public class ObjectsPersistenceService {
             tv.setTitle(apiTv.getOriginal_name());
             tv.setOverview(apiTv.getOverview());
             tv.setLanguage(apiTv.getOriginal_language());
-            tv.setReleaseDate(apiTv.getFirst_air_date());
+            tv.setReleaseDate(apiTv.getFirst_air_date().substring(0,4));
             tv.setBackdropPath(apiTv.getBackdrop_path());
             tv.setOriginCountry(apiTv.getOrigin_country().size() != 0 ? apiTv.getOrigin_country().get(0) : null);
             List<Genre> genres = this.getGenresFromMovieTvGenresList(apiTv);
@@ -163,7 +163,7 @@ public class ObjectsPersistenceService {
             // Used to not exceed the number of requests allowed
             Thread.sleep(300);
 
-            if(index <= 2){
+            if(index <= 8){
 
                 Person completedPerson = getCompletePerson(person, "AR");
                 people.add(completedPerson);
@@ -178,7 +178,7 @@ public class ObjectsPersistenceService {
         for (ApiCastCrew person : apiMovieTvCastCrewList.getCrew()) {
 
             Person completedPerson = null;
-            if (index <= 2){
+            if (index <= 3){
 
                 // Used to not exceed the number of requests allowed
                 Thread.sleep(300);
@@ -208,20 +208,28 @@ public class ObjectsPersistenceService {
         switch (type){
             case "AR":
                 completedPerson = new Artist();
+                completedPerson.setJob("Artist");
                 break;
             case "DI":
                 completedPerson = new Director();
+                completedPerson.setJob("Director");
                 break;
             case "PR":
                 completedPerson = new Producer();
+                completedPerson.setJob("Producer");
                 break;
         }
 
         completedPerson.setName(incompletePerson.getName());
         completedPerson.setIdApi(incompletePerson.getId());
         completedPerson.setGender(incompletePerson.getGender());
-        completedPerson.setHometown(apiPerson.getPlace_of_birth());
-        completedPerson.setHomeCountry(apiPerson.getPlace_of_birth());
+        completedPerson.setHometown(apiPerson.getPlace_of_birth() != null ?
+                ((apiPerson.getPlace_of_birth().split(",").length == 1) ? null :
+                            apiPerson.getPlace_of_birth().split(",")
+                                    [apiPerson.getPlace_of_birth().split(",").length - 2]) : null);
+        completedPerson.setHomeCountry(apiPerson.getPlace_of_birth() != null ?
+                (apiPerson.getPlace_of_birth().split(",")
+                        [apiPerson.getPlace_of_birth().split(",").length - 1]) : null);
         completedPerson.setHeight(1.7);
         completedPerson.setProfilePath(apiPerson.getProfile_path());
 

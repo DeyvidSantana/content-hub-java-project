@@ -1,6 +1,5 @@
 package com.projectpitang.contenthub.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Objects;
 import com.projectpitang.contenthub.dto.PersonDTO;
@@ -45,12 +44,13 @@ public class Person implements IObjectPersistent<Long> {
     @Column(name = "per_cl_genre")
     private PersonGender gender;
 
+    @Size(min = 1, max = 100)
+    @Column(name = "job")
+    private String job;
+
+    /* The cascade types for this relationship should be just persist and merge.
+       The refresh type is being used only to persist data, but is not recommended.*/
     @ManyToMany(cascade = CascadeType.REFRESH, mappedBy = "cast")
-    /*@JsonBackReference
-    @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE}, targetEntity = Person.class)
-    @JoinTable(name = "tb_cast_person",
-            joinColumns = @JoinColumn(referencedColumnName = "cast_cl_id"),
-            inverseJoinColumns = {@JoinColumn(referencedColumnName = "per_cl_id")})*/
     private Set<Cast> cast;
 
     @Column(name = "per_cl_profilepath")
@@ -128,6 +128,14 @@ public class Person implements IObjectPersistent<Long> {
         this.gender = gender;
     }
 
+    public String getJob() {
+        return job;
+    }
+
+    public void setJob(String job) {
+        this.job = job;
+    }
+
     public Set<Cast> getCast() {
         return cast;
     }
@@ -160,6 +168,7 @@ public class Person implements IObjectPersistent<Long> {
         personDTO.setHometown(this.getHometown());
         personDTO.setHomeCountry(this.getHomeCountry());
         personDTO.setGender(this.getGender());
+        personDTO.setJob(this.job);
         personDTO.setProfilePath(this.profilePath);
         return personDTO;
     }
